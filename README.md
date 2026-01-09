@@ -169,7 +169,6 @@ You must include the [NOTICE](NOTICE) file in any redistribution.
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/popup-studio-ai/bkit-claude-code/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/popup-studio-ai/bkit-claude-code/discussions)
 - **Email**: contact@popupstudio.ai
 
 ---
