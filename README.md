@@ -78,6 +78,7 @@ cp -r bkit-claude-code/.claude your-project/
 ## Documentation
 
 - **[Architecture & User Journey](docs/ARCHITECTURE.md)** - Complete system analysis and user experience guide
+- **[AI-Native Transformation](docs/AI-NATIVE-TRANSFORMATION.md)** - Business value analysis for C-Level executives
 - [Getting Started](docs/getting-started.md)
 - [PDCA Methodology](docs/pdca-methodology.md)
 - [Development Pipeline](docs/development-pipeline.md)
