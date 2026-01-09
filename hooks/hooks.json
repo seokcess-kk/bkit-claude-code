@@ -1,4 +1,5 @@
 {
+  "description": "bkit Vibecoding Kit hooks for PDCA workflow automation",
   "hooks": {
     "SessionStart": [
       {
@@ -40,8 +41,8 @@
       {
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Evaluate if Claude should stop working.\n\nCheck these criteria:\n- Todo list: All tasks completed?\n- Design-implementation: Aligned?\n- Tests: Written if needed?\n- Docs: Updated if needed?\n\nIf all complete, Claude can stop.\nIf not, list remaining items with line breaks."
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-hook.sh"
           }
         ]
       }
@@ -50,8 +51,8 @@
       {
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Evaluate if subagent task is complete.\n\nCheck:\n- Results sufficient?\n- Summary needed for main conversation?\n\nIf complete, subagent can stop.\nIf not, list remaining items with line breaks."
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent-stop-hook.sh"
           }
         ]
       }
