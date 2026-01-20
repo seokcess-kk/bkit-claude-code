@@ -700,9 +700,9 @@ claude --plugin-dir ./bkit
 ---
 
 **Created**: 2026-01-09
-**Updated**: 2026-01-19
+**Updated**: 2026-01-20
 **Author**: Claude (with Kay)
-**Version**: v1.1.4
+**Version**: v1.2.0
 **Status**: Design verified → Implementation complete
 
 ---
@@ -740,6 +740,23 @@ claude --plugin-dir ./bkit
 ---
 
 ## Changelog
+
+### v1.2.0 (2026-01-20)
+- 🏗️ **Architecture Refactoring**: Remove `.claude/` from version control, use root-level as single source of truth
+- 📦 **Skill Consolidation**: 26 → 18 skills (8 skills merged)
+  - `task-classification` → `lib/common.sh`
+  - `level-detection` → `lib/common.sh`
+  - `pdca-methodology` → `bkit-rules`
+  - `document-standards` → `bkit-templates`
+  - `evaluator-optimizer` → `/pdca-iterate` command
+  - `analysis-patterns` → `bkit-templates`
+  - `ai-native-development` → `enterprise`
+  - `monorepo-architecture` → `enterprise`
+- 🔧 **Centralized Configuration**: New `bkit.config.json` for all settings
+- 📚 **Shared Library**: New `lib/common.sh` with utility functions
+- 🔗 **Unified PreToolUse Hook**: `pre-write.sh` combines PDCA check + task classification + convention hints
+- 📝 **Documentation**: Updated bkit-system/ for Obsidian graph view
+- 🎯 **Customization Guide**: Override pattern documentation for project-level customization
 
 ### v1.1.4 (2026-01-19)
 - 🔧 Simplify hooks system for stability (remove unstable prompt-type hooks)

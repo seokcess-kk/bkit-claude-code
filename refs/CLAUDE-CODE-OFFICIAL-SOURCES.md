@@ -215,14 +215,23 @@ hooks: hooks.json
 
 ## 8. bkit Plugin Compatibility
 
-### Current bkit Version: 1.1.4
+### Current bkit Version: 1.2.0
 
 | Component | Count | Claude Code Compatibility |
 |-----------|-------|--------------------------|
 | Commands | 18 | v2.1.x ✅ |
 | Agents | 11 | v2.1.x ✅ |
-| Skills | 24 | v2.1.x ✅ |
-| Hooks | 6 | v2.1.x ✅ |
+| Skills | 18 | v2.1.x ✅ |
+| Scripts | 19 | v2.1.x ✅ |
+| Templates | 20 | v2.1.x ✅ |
+| Hooks | 3 events | v2.1.x ✅ |
+
+### v1.2.0 Changes
+
+- Skills consolidated: 26 → 18 (8 merged into others)
+- New centralized config: `bkit.config.json`
+- New shared library: `lib/common.sh`
+- `.claude/` removed from version control (override pattern for customization)
 
 ### Validation Script
 
