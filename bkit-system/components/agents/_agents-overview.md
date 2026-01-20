@@ -148,19 +148,22 @@ hooks:
 
 ## Agent 소스 위치
 
+Agents are at root level (not in .claude/):
+
 ```
-.claude/agents/
-├── starter-guide.md
-├── bkend-expert.md
-├── enterprise-expert.md
-├── infra-architect.md
-├── pipeline-guide.md
-├── gap-detector.md
-├── design-validator.md
-├── code-analyzer.md
-├── qa-monitor.md
-├── pdca-iterator.md
-└── report-generator.md
+bkit-claude-code/
+└── agents/
+    ├── starter-guide.md
+    ├── bkend-expert.md
+    ├── enterprise-expert.md
+    ├── infra-architect.md
+    ├── pipeline-guide.md
+    ├── gap-detector.md
+    ├── design-validator.md
+    ├── code-analyzer.md
+    ├── qa-monitor.md
+    ├── pdca-iterator.md
+    └── report-generator.md
 ```
 
 ---

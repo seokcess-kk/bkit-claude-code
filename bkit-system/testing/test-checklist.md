@@ -12,7 +12,7 @@
 
 ## 1. PreToolUse Hooks 테스트
 
-### 1.1 bkit-rules (pdca-pre-write.sh)
+### 1.1 bkit-rules (pre-write.sh - unified hook)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
@@ -22,17 +22,19 @@
 | 1.1.4 | README.md Write | 빈 출력 (src/ 외부) | [ ] |
 | 1.1.5 | src/lib/utils.ts Write | 빈 출력 (feature 아님) | [ ] |
 
-### 1.2 task-classification (task-classify.sh)
+### 1.2 Task Classification (integrated in pre-write.sh)
+
+> **Note**: Task classification is now integrated into `pre-write.sh` (v1.2.0)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
-| 1.2.1 | 30자 수정 | "Quick Fix" | [ ] |
-| 1.2.2 | 100자 수정 | "Minor Change" | [ ] |
-| 1.2.3 | 500자 수정 | "Feature" | [ ] |
-| 1.2.4 | 1500자 수정 | "Major Feature" | [ ] |
+| 1.2.1 | 30자 수정 | "Quick Fix" (no PDCA) | [ ] |
+| 1.2.2 | 100자 수정 | "Minor Change" (check /pdca-status) | [ ] |
+| 1.2.3 | 500자 수정 | "Feature" (design doc recommended) | [ ] |
+| 1.2.4 | 1500자 수정 | "Major Feature" (design doc required, may block) | [ ] |
 | 1.2.5 | docs/README.md 수정 | 빈 출력 (src/ 외부) | [ ] |
 
-### 1.3 phase-2-convention (phase2-convention-pre.sh)
+### 1.3 Convention Hints (integrated in pre-write.sh)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
@@ -103,7 +105,7 @@
 |---|-------|-----------|----------|------|
 | 3.1 | phase-4-api | API 작업 완료 후 | "Zero Script QA 안내" | [ ] |
 | 3.2 | phase-8-review | 리뷰 작업 완료 후 | "리뷰 완료 요약" | [ ] |
-| 3.3 | analysis-patterns | 갭 분석 완료 후 | "분석 결과 안내" | [ ] |
+| 3.3 | bkit-templates (via gap-detector) | 갭 분석 완료 후 | "분석 결과 안내" | [ ] |
 | 3.4 | zero-script-qa | QA 세션 종료 | "다음 단계 안내" | [ ] |
 
 ---
@@ -128,7 +130,7 @@
 | 5.1.3 | "쿠버네티스 배포 설정해줘" | enterprise, phase-9-deployment | [ ] |
 | 5.1.4 | "API 설계해줘" | phase-4-api | [ ] |
 | 5.1.5 | "디자인 시스템 구축해줘" | phase-5-design-system | [ ] |
-| 5.1.6 | "갭 분석해줘" | analysis-patterns | [ ] |
+| 5.1.6 | "갭 분석해줘" | bkit-templates, gap-detector agent | [ ] |
 | 5.1.7 | "QA 해줘" | zero-script-qa | [ ] |
 
 ### 5.2 Level 감지
@@ -202,9 +204,9 @@
 ### Script 단위 테스트
 
 ```bash
-# 직접 script 실행
+# 직접 script 실행 (scripts are at root level, not in .claude/)
 echo '{"tool_input":{"file_path":"src/features/auth/login.ts","content":"test"}}' | \
-  .claude/scripts/pdca-pre-write.sh
+  scripts/pre-write.sh
 ```
 
 ### 통합 테스트

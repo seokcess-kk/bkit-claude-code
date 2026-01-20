@@ -1,6 +1,8 @@
 # Scripts Overview
 
-> 19 Shell Scripts used by bkit hooks (v1.2.0)
+> 18 Shell Scripts used by bkit hooks (v1.2.0)
+>
+> **Note**: task-classify.sh was removed and merged into pre-write.sh
 
 ## What are Scripts?
 
@@ -18,9 +20,8 @@ bkit-claude-code/
 ├── lib/
 │   └── common.sh              # Shared utility library
 ├── scripts/
-│   ├── pre-write.sh           # Core: Unified PreToolUse hook
+│   ├── pre-write.sh           # Core: Unified PreToolUse hook (includes task classification)
 │   ├── pdca-post-write.sh     # Core: PostToolUse guidance
-│   ├── task-classify.sh       # Core: Task classification
 │   ├── select-template.sh     # Core: Template selection
 │   │
 │   ├── phase2-convention-pre.sh   # Phase: Convention check
@@ -46,14 +47,15 @@ bkit-claude-code/
 
 ## Script Categories
 
-### Core Scripts (4)
+### Core Scripts (3)
 
 | Script | Hook | Purpose |
 |--------|------|---------|
 | **pre-write.sh** | PreToolUse (Write\|Edit) | Unified hook: PDCA check + task classification + convention hints |
 | **pdca-post-write.sh** | PostToolUse (Write) | Guide next steps, suggest gap analysis |
-| **task-classify.sh** | - | Classify task size (Quick Fix → Major Feature) |
 | **select-template.sh** | - | Select template based on level and document type |
+
+> **Note**: Task classification logic is now integrated into pre-write.sh via lib/common.sh
 
 ### Phase Scripts (6)
 

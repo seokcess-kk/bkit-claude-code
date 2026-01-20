@@ -7,30 +7,30 @@
 ## Skills (18)
 
 ### Core Skills (2)
-- [[components/skills/bkit-rules]] - PDCA rules + auto-triggering + code quality standards
-- [[components/skills/bkit-templates]] - Document templates for consistent PDCA documentation
+- [[../skills/bkit-rules/SKILL|bkit-rules]] - PDCA rules + auto-triggering + code quality standards
+- [[../skills/bkit-templates/SKILL|bkit-templates]] - Document templates for consistent PDCA documentation
 
 ### Level Skills (3)
-- [[components/skills/starter]] - Starter level (static web, HTML/CSS/JS, Next.js basics)
-- [[components/skills/dynamic]] - Dynamic level (BaaS fullstack with bkend.ai)
-- [[components/skills/enterprise]] - Enterprise level (MSA/K8s/Terraform, AI Native)
+- [[../skills/starter/SKILL|starter]] - Starter level (static web, HTML/CSS/JS, Next.js basics)
+- [[../skills/dynamic/SKILL|dynamic]] - Dynamic level (BaaS fullstack with bkend.ai)
+- [[../skills/enterprise/SKILL|enterprise]] - Enterprise level (MSA/K8s/Terraform, AI Native)
 
 ### Pipeline Phase Skills (10)
-- [[components/skills/development-pipeline]] - 9-stage pipeline overview
-- [[components/skills/phase-1-schema]] - Schema/terminology definition
-- [[components/skills/phase-2-convention]] - Coding conventions
-- [[components/skills/phase-3-mockup]] - Mockup development
-- [[components/skills/phase-4-api]] - API design/implementation
-- [[components/skills/phase-5-design-system]] - Design system
-- [[components/skills/phase-6-ui-integration]] - UI implementation + API integration
-- [[components/skills/phase-7-seo-security]] - SEO/Security
-- [[components/skills/phase-8-review]] - Code review + quality analysis
-- [[components/skills/phase-9-deployment]] - Deployment
+- [[../skills/development-pipeline/SKILL|development-pipeline]] - 9-stage pipeline overview
+- [[../skills/phase-1-schema/SKILL|phase-1-schema]] - Schema/terminology definition
+- [[../skills/phase-2-convention/SKILL|phase-2-convention]] - Coding conventions
+- [[../skills/phase-3-mockup/SKILL|phase-3-mockup]] - Mockup development
+- [[../skills/phase-4-api/SKILL|phase-4-api]] - API design/implementation
+- [[../skills/phase-5-design-system/SKILL|phase-5-design-system]] - Design system
+- [[../skills/phase-6-ui-integration/SKILL|phase-6-ui-integration]] - UI implementation + API integration
+- [[../skills/phase-7-seo-security/SKILL|phase-7-seo-security]] - SEO/Security
+- [[../skills/phase-8-review/SKILL|phase-8-review]] - Code review + quality analysis
+- [[../skills/phase-9-deployment/SKILL|phase-9-deployment]] - Deployment
 
 ### Specialized Skills (3)
-- [[components/skills/zero-script-qa]] - Zero Script QA (log-based testing)
-- [[components/skills/mobile-app]] - Mobile app development (React Native, Flutter)
-- [[components/skills/desktop-app]] - Desktop app development (Electron, Tauri)
+- [[../skills/zero-script-qa/SKILL|zero-script-qa]] - Zero Script QA (log-based testing)
+- [[../skills/mobile-app/SKILL|mobile-app]] - Mobile app development (React Native, Flutter)
+- [[../skills/desktop-app/SKILL|desktop-app]] - Desktop app development (Electron, Tauri)
 
 ### Removed Skills (v1.2.0)
 The following skills were consolidated:
@@ -46,19 +46,19 @@ The following skills were consolidated:
 ## Agents (11)
 
 ### Level-Based Agents
-- [[components/agents/starter-guide]] - Starter level guide (beginners)
-- [[components/agents/bkend-expert]] - Dynamic level (BaaS expert)
-- [[components/agents/enterprise-expert]] - Enterprise level (CTO-level advisor)
-- [[components/agents/infra-architect]] - Infrastructure architect (AWS/K8s/Terraform)
+- [[../agents/starter-guide|starter-guide]] - Starter level guide (beginners)
+- [[../agents/bkend-expert|bkend-expert]] - Dynamic level (BaaS expert)
+- [[../agents/enterprise-expert|enterprise-expert]] - Enterprise level (CTO-level advisor)
+- [[../agents/infra-architect|infra-architect]] - Infrastructure architect (AWS/K8s/Terraform)
 
 ### Task-Based Agents
-- [[components/agents/pipeline-guide]] - Pipeline guide (9-phase development)
-- [[components/agents/gap-detector]] - Gap analysis (design vs implementation)
-- [[components/agents/design-validator]] - Design validation
-- [[components/agents/code-analyzer]] - Code quality analysis
-- [[components/agents/qa-monitor]] - QA monitoring (Zero Script QA)
-- [[components/agents/pdca-iterator]] - Iteration optimizer (Evaluator-Optimizer pattern)
-- [[components/agents/report-generator]] - Report generation
+- [[../agents/pipeline-guide|pipeline-guide]] - Pipeline guide (9-phase development)
+- [[../agents/gap-detector|gap-detector]] - Gap analysis (design vs implementation)
+- [[../agents/design-validator|design-validator]] - Design validation
+- [[../agents/code-analyzer|code-analyzer]] - Code quality analysis
+- [[../agents/qa-monitor|qa-monitor]] - QA monitoring (Zero Script QA)
+- [[../agents/pdca-iterator|pdca-iterator]] - Iteration optimizer (Evaluator-Optimizer pattern)
+- [[../agents/report-generator|report-generator]] - Report generation
 
 ## Commands (18)
 
@@ -92,40 +92,41 @@ The following skills were consolidated:
 
 Defined in `hooks/hooks.json`:
 
-- [[components/hooks/SessionStart]] - Plugin initialization on session start
-- [[components/hooks/PreToolUse]] - Before Write/Edit operations
-- [[components/hooks/PostToolUse]] - After Write operations
+- [[components/hooks/_hooks-overview|SessionStart]] - Plugin initialization on session start
+- [[components/hooks/_hooks-overview|PreToolUse]] - Before Write/Edit operations
+- [[components/hooks/_hooks-overview|PostToolUse]] - After Write operations
 
-## Scripts (19)
+## Scripts (18)
+
+> **Note**: Scripts reduced from 19 to 18 (task-classify.sh removed in v1.2.0, merged into pre-write.sh)
 
 ### Core Scripts
-- [[components/scripts/pre-write]] - Unified PreToolUse hook (PDCA + classification + convention)
-- [[components/scripts/pdca-post-write]] - PostToolUse guidance after Write
-- [[components/scripts/task-classify]] - Task classification (Quick Fix → Major Feature)
-- [[components/scripts/select-template]] - Template selection by level
+- `scripts/pre-write.sh` - Unified PreToolUse hook (PDCA + classification + convention)
+- `scripts/pdca-post-write.sh` - PostToolUse guidance after Write
+- `scripts/select-template.sh` - Template selection by level
 
 ### Phase Scripts
-- [[components/scripts/phase2-convention-pre]] - Convention check before write
-- [[components/scripts/phase4-api-stop]] - Zero Script QA after API implementation
-- [[components/scripts/phase5-design-post]] - Design token verification
-- [[components/scripts/phase6-ui-post]] - Layer separation verification
-- [[components/scripts/phase8-review-stop]] - Review completion guidance
-- [[components/scripts/phase9-deploy-pre]] - Deployment environment validation
+- `scripts/phase2-convention-pre.sh` - Convention check before write
+- `scripts/phase4-api-stop.sh` - Zero Script QA after API implementation
+- `scripts/phase5-design-post.sh` - Design token verification
+- `scripts/phase6-ui-post.sh` - Layer separation verification
+- `scripts/phase8-review-stop.sh` - Review completion guidance
+- `scripts/phase9-deploy-pre.sh` - Deployment environment validation
 
 ### QA Scripts
-- [[components/scripts/qa-pre-bash]] - QA setup before Bash
-- [[components/scripts/qa-monitor-post]] - QA completion guidance
-- [[components/scripts/qa-stop]] - QA session cleanup
+- `scripts/qa-pre-bash.sh` - QA setup before Bash
+- `scripts/qa-monitor-post.sh` - QA completion guidance
+- `scripts/qa-stop.sh` - QA session cleanup
 
 ### Agent Scripts
-- [[components/scripts/design-validator-pre]] - Design document validation
-- [[components/scripts/gap-detector-post]] - Gap analysis guidance
-- [[components/scripts/analysis-stop]] - Analysis completion guidance
+- `scripts/design-validator-pre.sh` - Design document validation
+- `scripts/gap-detector-post.sh` - Gap analysis guidance
+- `scripts/analysis-stop.sh` - Analysis completion guidance
 
 ### Utility Scripts
-- [[components/scripts/pdca-pre-write]] - Legacy (merged into pre-write.sh)
-- [[components/scripts/sync-folders]] - Folder synchronization
-- [[components/scripts/validate-plugin]] - Plugin validation
+- `scripts/pdca-pre-write.sh` - Legacy (merged into pre-write.sh)
+- `scripts/sync-folders.sh` - Folder synchronization
+- `scripts/validate-plugin.sh` - Plugin validation
 
 ## Infrastructure
 

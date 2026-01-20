@@ -48,7 +48,7 @@
 | Agents | 11 | Specialized task execution | [[components/agents/_agents-overview]] |
 | Commands | 18 | Slash commands | `/pdca-*`, `/init-*`, etc. |
 | Hooks | 3 events | Event-based triggers | [[components/hooks/_hooks-overview]] |
-| Scripts | 19 | Actual logic execution | [[components/scripts/_scripts-overview]] |
+| Scripts | 18 | Actual logic execution | [[components/scripts/_scripts-overview]] |
 | Lib | 1 | Shared utilities | `lib/common.sh` |
 | Config | 1 | Centralized settings | `bkit.config.json` |
 | Templates | 20 | Document templates | PDCA + Pipeline phases |
