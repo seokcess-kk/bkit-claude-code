@@ -187,10 +187,9 @@ Claude: 1. Compare code with design documents
 
 ---
 
-## Reference Documents
+## Reference
 
-- [PDCA Overview](.claude/docs/pdca/overview.md)
-- [Design Guide](.claude/docs/pdca/design-guide.md)
+Use `/pdca-plan`, `/pdca-design`, `/pdca-analyze` commands for PDCA workflow.
 
 ---
 

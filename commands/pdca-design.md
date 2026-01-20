@@ -22,7 +22,7 @@ Receives feature name via $ARGUMENTS. (e.g., /pdca-design login)
    - Auto-reflect in design document
 
 4. **Apply Template**
-   - Use .claude/templates/design.template.md
+   - Use templates/design.template.md
    - Variable substitution and Plan linkage
 
 5. **Generate Document**

@@ -62,6 +62,6 @@ Shall we start Phase 5?
 
 ## Reference
 
-- `.claude/skills/phase-*/`: Detailed guide per Phase
-- `.claude/templates/pipeline/`: Templates per Phase
-- `.claude/agents/pipeline-guide.md`: Guide agent
+- `skills/phase-*/`: Detailed guide per Phase
+- `templates/pipeline/`: Templates per Phase
+- `agents/pipeline-guide.md`: Guide agent

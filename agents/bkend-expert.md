@@ -138,4 +138,4 @@ const mutation = useMutation({
 
 ## Reference Skills
 
-Refer to `.claude/skills/dynamic/SKILL.md` when working
+Refer to `skills/dynamic/SKILL.md` when working with bkend.ai projects.

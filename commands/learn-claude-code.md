@@ -24,20 +24,7 @@ Solution: Provide consistent education through this command
 
 ## Tasks Performed
 
-### Step 1: Reference Master Guide
-
-**Must** read the following documents first:
-
-```
-.claude/docs/CLAUDE-CODE-MASTERY.md          # Table of contents and core concepts
-.claude/docs/mastery/04-curriculum.md        # Education curriculum
-.claude/docs/mastery/02-language-templates.md # Language-specific templates
-.claude/docs/mastery/03-project-structures.md # Project structure guides
-```
-
-Reference appropriate files based on needed content.
-
-### Step 2: Analyze Current Settings
+### Step 1: Analyze Current Settings
 
 Analyze the project's Claude Code configuration status:
 
@@ -58,17 +45,14 @@ The following files/folders are **default files of this learning system** and sh
 
 ```bash
 # Files/folders to exclude (not counted as user settings)
-- .claude/commands/learn-claude-code.md      # Learning command
-- .claude/commands/setup-claude-code.md      # Setup generation command
-- .claude/commands/upgrade-claude-code.md    # Upgrade command
-- .claude/docs/                              # Entire master guide documents
+# These are bkit plugin defaults, not user-created settings
 ```
 
 **Examples**:
-- If `.claude/commands/` only has the above 3 files → Determine as "No Commands"
-- If `.claude/commands/commit.md` is additionally present → Determine as "Commands exist"
+- If `.claude/commands/` is empty or doesn't exist → Determine as "No Commands"
+- If `.claude/commands/commit.md` exists → Determine as "Commands exist"
 
-### Step 3: Determine User Level
+### Step 2: Determine User Level
 
 | Level | Condition | Learning Content |
 |-------|-----------|------------------|
@@ -77,7 +61,7 @@ The following files/folders are **default files of this learning system** and sh
 | 3 | Commands/Hooks exist | Specialization: Agents, Skills, MCP |
 | 4 | Most settings complete | Team Optimization: GitHub Action, Team rules |
 
-### Step 4: Provide Educational Content
+### Step 3: Provide Educational Content
 
 Provide education matching the selected level:
 
@@ -216,7 +200,7 @@ claude (bot): Added enum guidelines to CLAUDE.md!
 3. Gradually accumulate team knowledge
 ```
 
-### Step 5: Guide to Next Level
+### Step 4: Guide to Next Level
 
 After completing current level, guide to proceed to next level.
 
@@ -261,22 +245,5 @@ docs/
 
 ## Detailed Learning
 
-- .claude/docs/pdca/overview.md
-- .claude/docs/prompts/ (Prompt examples)
+Use `/pdca-design`, `/pdca-plan`, `/pdca-analyze` commands to learn PDCA methodology.
 ```
-
-## Reference Documents
-
-### Claude Code Mastery
-- .claude/docs/CLAUDE-CODE-MASTERY.md
-
-### PDCA Methodology
-- .claude/docs/pdca/overview.md
-- .claude/docs/pdca/plan-guide.md
-- .claude/docs/pdca/design-guide.md
-- .claude/docs/pdca/check-act-guide.md
-
-### Level Guides
-- .claude/docs/levels/starter-guide.md
-- .claude/docs/levels/dynamic-guide.md
-- .claude/docs/levels/enterprise-guide.md

@@ -87,9 +87,9 @@ To have Claude automatically reference the glossary:
 For this project's term definitions, see `docs/01-plan/glossary.md`.
 ```
 
-**Method 2**: Add term rules to .claude/rules/
+**Method 2**: Add term rules to project CLAUDE.md
 ```markdown
-<!-- .claude/rules/terminology.md -->
+<!-- Add to CLAUDE.md -->
 Project terms are defined in docs/01-plan/glossary.md.
 Always reference when using business terms.
 ```

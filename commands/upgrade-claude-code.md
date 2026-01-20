@@ -28,20 +28,7 @@ Solution:
 
 ## Tasks Performed
 
-### Step 1: Reference Master Guide
-
-**Must** read the following documents first:
-
-```
-.claude/docs/CLAUDE-CODE-MASTERY.md           # Table of contents and core concepts
-.claude/docs/mastery/05-advanced.md           # Latest trend analysis methods
-.claude/docs/mastery/02-language-templates.md # Language-specific templates
-.claude/docs/mastery/01-settings-guide.md     # Detailed settings guide (includes MCP recommendations)
-```
-
-Reference appropriate files based on needed content.
-
-### Step 2: Analyze Current Settings
+### Step 1: Analyze Current Settings
 
 ```bash
 # Analysis targets
@@ -54,7 +41,7 @@ Reference appropriate files based on needed content.
 7. .github/workflows/ - CI/CD automation
 ```
 
-### Step 3: Calculate Settings Score
+### Step 2: Calculate Settings Score
 
 ```markdown
 ## Scoring Criteria (Total 100 points)
@@ -109,7 +96,7 @@ Reference appropriate files based on needed content.
 - 10 points: Full structure + active documentation
 ```
 
-### Step 4: Research Latest Trends (WebSearch)
+### Step 3: Research Latest Trends (WebSearch)
 
 Collect latest information with the following search queries:
 
@@ -121,7 +108,7 @@ Collect latest information with the following search queries:
 - "Boris Cherny Claude Code tips"
 ```
 
-### Step 5: Identify Improvements
+### Step 4: Identify Improvements
 
 ```markdown
 ## Improvement Priority
@@ -141,7 +128,7 @@ Collect latest information with the following search queries:
 - [ ] Improve documentation
 ```
 
-### Step 6: Suggest to User
+### Step 5: Suggest to User
 
 ```markdown
 ## Upgrade Suggestions
@@ -174,7 +161,7 @@ Collect latest information with the following search queries:
 - {New feature 2}
 ```
 
-### Step 7: Wait for User Approval
+### Step 6: Wait for User Approval
 
 ```
 Would you like to apply the upgrades?
@@ -184,7 +171,7 @@ Would you like to apply the upgrades?
 3. Cancel
 ```
 
-### Step 8: Apply Upgrades
+### Step 7: Apply Upgrades
 
 Upon user approval:
 1. Create backup (existing files)
@@ -222,17 +209,6 @@ git checkout HEAD~1 -- CLAUDE.md
 git checkout HEAD~1 -- .mcp.json
 ```
 
-## Reference Documents
+## Reference
 
-### Claude Code Mastery
-- .claude/docs/CLAUDE-CODE-MASTERY.md
-- .claude/docs/mastery/05-advanced.md (Trend analysis)
-- .claude/docs/mastery/01-settings-guide.md (includes MCP recommendation strategy)
-
-### PDCA Methodology
-- .claude/docs/pdca/overview.md
-- .claude/docs/levels/upgrade-guide.md (Level upgrade)
-
-### Analysis Tools
-- .claude/agents/gap-detector.md (Gap analysis)
-- .claude/skills/analysis-patterns/ (Analysis patterns)
+- `agents/gap-detector.md` - Gap analysis agent
