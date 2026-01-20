@@ -17,3 +17,7 @@ node_modules/
 .vscode/
 *.swp
 *.swo
+test/
+
+# Local Claude Code settings (plugin elements are at root level)
+.claude/

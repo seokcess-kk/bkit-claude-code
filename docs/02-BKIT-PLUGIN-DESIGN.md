@@ -328,12 +328,12 @@ Keep under 500 lines for optimal performance.
 
 ### 3.4 Path Portability
 
-> ⚠️ **CRITICAL**: Always use `${CLAUDE_PLUGIN_ROOT}` for file references within plugins.
+> ⚠️ **CRITICAL**: Always use `$CLAUDE_PROJECT_DIR` for file references within plugins.
 
 ```bash
 # ✅ Correct
-${CLAUDE_PLUGIN_ROOT}/scripts/setup.sh
-${CLAUDE_PLUGIN_ROOT}/references/guide.md
+$CLAUDE_PROJECT_DIR/scripts/setup.sh
+$CLAUDE_PROJECT_DIR/references/guide.md
 
 # ❌ Incorrect - will break after installation
 /Users/kay/plugins/bkit/scripts/setup.sh
@@ -700,9 +700,9 @@ claude --plugin-dir ./bkit
 ---
 
 **Created**: 2026-01-09
-**Updated**: 2026-01-19
+**Updated**: 2026-01-20
 **Author**: Claude (with Kay)
-**Version**: v1.1.4
+**Version**: v1.2.0
 **Status**: Design verified → Implementation complete
 
 ---
@@ -741,6 +741,23 @@ claude --plugin-dir ./bkit
 
 ## Changelog
 
+### v1.2.0 (2026-01-20)
+- 🏗️ **Architecture Refactoring**: Remove `.claude/` from version control, use root-level as single source of truth
+- 📦 **Skill Consolidation**: 26 → 18 skills (8 skills merged)
+  - `task-classification` → `lib/common.sh`
+  - `level-detection` → `lib/common.sh`
+  - `pdca-methodology` → `bkit-rules`
+  - `document-standards` → `bkit-templates`
+  - `evaluator-optimizer` → `/pdca-iterate` command
+  - `analysis-patterns` → `bkit-templates`
+  - `ai-native-development` → `enterprise`
+  - `monorepo-architecture` → `enterprise`
+- 🔧 **Centralized Configuration**: New `bkit.config.json` for all settings
+- 📚 **Shared Library**: New `lib/common.sh` with utility functions
+- 🔗 **Unified PreToolUse Hook**: `pre-write.sh` combines PDCA check + task classification + convention hints
+- 📝 **Documentation**: Updated bkit-system/ for Obsidian graph view
+- 🎯 **Customization Guide**: Override pattern documentation for project-level customization
+
 ### v1.1.4 (2026-01-19)
 - 🔧 Simplify hooks system for stability (remove unstable prompt-type hooks)
 - 🗑️ Remove stop-hook.sh and subagent-stop-hook.sh (JSON format issues)
@@ -774,7 +791,7 @@ claude --plugin-dir ./bkit
 - ❌ Removed unsupported `permissions` field from plugin.json
 - 🔄 Updated installation commands to use `/plugin install`
 - 📝 Added SKILL.md constraints (name: 64 chars, description: 1024 chars)
-- 📝 Added ${CLAUDE_PLUGIN_ROOT} path requirement
+- 📝 Added $CLAUDE_PROJECT_DIR path requirement
 - 📝 Added comprehensive official documentation references
 - 📝 Updated agents count from 9 to 10
 
