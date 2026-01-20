@@ -18,7 +18,7 @@ hooks:
     - matcher: "Write"
       hooks:
         - type: command
-          command: "$CLAUDE_PROJECT_DIR/scripts/qa-monitor-post.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/scripts/qa-monitor-post.sh"
 model: haiku
 tools:
   - Bash

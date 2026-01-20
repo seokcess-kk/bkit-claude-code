@@ -31,7 +31,7 @@ hooks:
     - matcher: "Write"
       hooks:
         - type: command
-          command: "$CLAUDE_PROJECT_DIR/scripts/gap-detector-post.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/scripts/gap-detector-post.sh"
 ---
 
 # Design-Implementation Gap Detection Agent

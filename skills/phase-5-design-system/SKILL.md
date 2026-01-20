@@ -14,7 +14,7 @@ hooks:
     - matcher: "Write"
       hooks:
         - type: command
-          command: "$CLAUDE_PROJECT_DIR/scripts/phase5-design-post.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/scripts/phase5-design-post.sh"
 agent: pipeline-guide
 allowed-tools:
   - Read

@@ -1,7 +1,7 @@
 #!/bin/bash
 # lib/common.sh
 # Purpose: Shared utility functions for bkit hooks
-# Usage: source "$CLAUDE_PROJECT_DIR/lib/common.sh"
+# Usage: source "${CLAUDE_PLUGIN_ROOT}/lib/common.sh"
 
 # ============================================================
 # Configuration Loading
@@ -47,36 +47,105 @@ get_config_array() {
 # Source File Detection
 # ============================================================
 
+# Configurable exclude patterns (can be overridden via environment)
+BKIT_EXCLUDE_PATTERNS="${BKIT_EXCLUDE_PATTERNS:-node_modules .git dist build .next __pycache__ .venv venv coverage .pytest_cache target .cargo vendor}"
+
 # Check if path is a source code file
+# Strategy: Negative pattern (exclusion) + Extension-based detection
+# Supports: JavaScript, TypeScript, Python, Go, Rust, Ruby, Java, PHP, Swift, etc.
 # Usage: is_source_file "/path/to/file"
 # Returns: 0 (true) or 1 (false)
 is_source_file() {
     local file_path="$1"
 
-    # Check if path starts with source directories
-    [[ "$file_path" == src/* ]] || \
-    [[ "$file_path" == lib/* ]] || \
-    [[ "$file_path" == app/* ]] || \
-    [[ "$file_path" == components/* ]] || \
-    [[ "$file_path" == pages/* ]] || \
-    [[ "$file_path" == features/* ]] || \
-    [[ "$file_path" == services/* ]]
+    # 1. Check against exclude patterns (known non-source directories)
+    for pattern in $BKIT_EXCLUDE_PATTERNS; do
+        [[ "$file_path" == *"$pattern"* ]] && return 1
+    done
+
+    # 2. Exclude documentation and configuration files
+    [[ "$file_path" == docs/* ]] && return 1
+    [[ "$file_path" == *.md ]] && return 1
+    [[ "$file_path" == *.json ]] && return 1
+    [[ "$file_path" == *.yaml ]] && return 1
+    [[ "$file_path" == *.yml ]] && return 1
+    [[ "$file_path" == *.toml ]] && return 1
+    [[ "$file_path" == *.lock ]] && return 1
+    [[ "$file_path" == *.txt ]] && return 1
+
+    # 3. Exclude hidden files and directories (except specific ones)
+    [[ "$file_path" == .* ]] && return 1
+    [[ "$file_path" == */.* ]] && return 1
+
+    # 4. Check if it's a recognized code file extension
+    is_code_file "$file_path"
 }
 
 # Check if path is a code file by extension
+# Enhanced with broader multi-language support
 # Usage: is_code_file "/path/to/file.ts"
 # Returns: 0 (true) or 1 (false)
 is_code_file() {
     local file_path="$1"
 
+    # JavaScript/TypeScript
     [[ "$file_path" == *.ts ]] || \
     [[ "$file_path" == *.tsx ]] || \
     [[ "$file_path" == *.js ]] || \
     [[ "$file_path" == *.jsx ]] || \
+    [[ "$file_path" == *.mjs ]] || \
+    [[ "$file_path" == *.cjs ]] || \
+    # Python
     [[ "$file_path" == *.py ]] || \
+    [[ "$file_path" == *.pyx ]] || \
+    [[ "$file_path" == *.pyi ]] || \
+    # Go
     [[ "$file_path" == *.go ]] || \
+    # Rust
     [[ "$file_path" == *.rs ]] || \
-    [[ "$file_path" == *.java ]]
+    # Java/Kotlin
+    [[ "$file_path" == *.java ]] || \
+    [[ "$file_path" == *.kt ]] || \
+    [[ "$file_path" == *.kts ]] || \
+    # Ruby
+    [[ "$file_path" == *.rb ]] || \
+    [[ "$file_path" == *.erb ]] || \
+    # PHP
+    [[ "$file_path" == *.php ]] || \
+    # Swift
+    [[ "$file_path" == *.swift ]] || \
+    # C/C++
+    [[ "$file_path" == *.c ]] || \
+    [[ "$file_path" == *.cpp ]] || \
+    [[ "$file_path" == *.cc ]] || \
+    [[ "$file_path" == *.h ]] || \
+    [[ "$file_path" == *.hpp ]] || \
+    # C#
+    [[ "$file_path" == *.cs ]] || \
+    # Scala
+    [[ "$file_path" == *.scala ]] || \
+    # Elixir
+    [[ "$file_path" == *.ex ]] || \
+    [[ "$file_path" == *.exs ]] || \
+    # Shell
+    [[ "$file_path" == *.sh ]] || \
+    [[ "$file_path" == *.bash ]] || \
+    # Vue/Svelte
+    [[ "$file_path" == *.vue ]] || \
+    [[ "$file_path" == *.svelte ]]
+}
+
+# Check if path is a UI component file
+# Usage: is_ui_file "/path/to/Component.tsx"
+# Returns: 0 (true) or 1 (false)
+is_ui_file() {
+    local file_path="$1"
+
+    # Check for common UI file patterns (framework-agnostic)
+    [[ "$file_path" == *.tsx ]] || \
+    [[ "$file_path" == *.jsx ]] || \
+    [[ "$file_path" == *.vue ]] || \
+    [[ "$file_path" == *.svelte ]]
 }
 
 # Check if path is an environment file
@@ -91,27 +160,54 @@ is_env_file() {
 # Feature Detection
 # ============================================================
 
+# Configurable feature directory patterns (can be overridden via environment)
+BKIT_FEATURE_PATTERNS="${BKIT_FEATURE_PATTERNS:-features modules packages apps services domains}"
+
 # Extract feature name from file path
+# Supports: Next.js, Python (Django/FastAPI), Go, Ruby, Monorepo structures
 # Usage: extract_feature "/src/features/auth/login.ts"
 # Output: "auth"
 extract_feature() {
     local file_path="$1"
     local feature=""
 
-    # Try to extract from features/ directory
-    if [[ "$file_path" == *features/* ]]; then
-        feature=$(echo "$file_path" | sed -n 's/.*features\/\([^\/]*\).*/\1/p')
-    elif [[ "$file_path" == *modules/* ]]; then
-        feature=$(echo "$file_path" | sed -n 's/.*modules\/\([^\/]*\).*/\1/p')
-    else
-        # Fall back to parent directory name
+    # 1. Try configured feature patterns first
+    for pattern in $BKIT_FEATURE_PATTERNS; do
+        if [[ "$file_path" == *"$pattern"/* ]]; then
+            feature=$(echo "$file_path" | sed -n "s/.*$pattern\/\([^\/]*\).*/\1/p")
+            [ -n "$feature" ] && break
+        fi
+    done
+
+    # 2. Try common directory structures for various languages
+    if [ -z "$feature" ]; then
+        # Python: app/routers/auth.py → auth (or filename)
+        if [[ "$file_path" == */routers/* ]] || [[ "$file_path" == */views/* ]] || [[ "$file_path" == */controllers/* ]]; then
+            feature=$(basename "$file_path" | sed 's/\.[^.]*$//')
+        # Go: internal/auth/handler.go → auth
+        elif [[ "$file_path" == */internal/* ]]; then
+            feature=$(echo "$file_path" | sed -n 's/.*internal\/\([^\/]*\).*/\1/p')
+        # Go: cmd/server/main.go → server
+        elif [[ "$file_path" == */cmd/* ]]; then
+            feature=$(echo "$file_path" | sed -n 's/.*cmd\/\([^\/]*\).*/\1/p')
+        # Ruby: app/models/user.rb → user
+        elif [[ "$file_path" == */models/* ]]; then
+            feature=$(basename "$file_path" | sed 's/\.[^.]*$//')
+        fi
+    fi
+
+    # 3. Fallback: use parent directory name
+    if [ -z "$feature" ]; then
         feature=$(echo "$file_path" | sed -n 's/.*\/\([^\/]*\)\/[^\/]*$/\1/p')
         [ -z "$feature" ] && feature=$(basename "$(dirname "$file_path")")
     fi
 
-    # Filter out generic directory names
+    # 4. Filter out generic directory names
     case "$feature" in
         src|lib|app|components|pages|utils|hooks|types|".")
+            echo ""
+            ;;
+        internal|cmd|pkg|models|views|routers|controllers|services)
             echo ""
             ;;
         *)

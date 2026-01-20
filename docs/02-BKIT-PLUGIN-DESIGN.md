@@ -328,13 +328,46 @@ Keep under 500 lines for optimal performance.
 
 ### 3.4 Path Portability
 
-> ⚠️ **CRITICAL**: Always use `$CLAUDE_PROJECT_DIR` for file references within plugins.
+> ⚠️ **CRITICAL**: Use the correct environment variable based on context.
+
+#### For Plugin's Own Files (scripts, templates, lib)
+
+Plugin의 자체 파일(스크립트, 템플릿, 라이브러리)을 참조할 때는 `${CLAUDE_PLUGIN_ROOT}` 사용:
 
 ```bash
-# ✅ Correct
-$CLAUDE_PROJECT_DIR/scripts/setup.sh
-$CLAUDE_PROJECT_DIR/references/guide.md
+# ✅ Correct - Plugin files
+${CLAUDE_PLUGIN_ROOT}/scripts/pre-write.sh
+${CLAUDE_PLUGIN_ROOT}/templates/plan.template.md
+${CLAUDE_PLUGIN_ROOT}/lib/common.sh
 
+# ❌ Incorrect - User's project doesn't have plugin files
+$CLAUDE_PROJECT_DIR/scripts/pre-write.sh
+```
+
+#### For User's Project Files (docs, config, source code)
+
+사용자 프로젝트의 파일(문서, 설정, 소스코드)을 참조할 때는 `$CLAUDE_PROJECT_DIR` 사용:
+
+```bash
+# ✅ Correct - User project files
+$CLAUDE_PROJECT_DIR/docs/02-design/
+$CLAUDE_PROJECT_DIR/CLAUDE.md
+$CLAUDE_PROJECT_DIR/bkit.config.json
+
+# ❌ Incorrect - Plugin doesn't contain user's docs
+${CLAUDE_PLUGIN_ROOT}/docs/02-design/
+```
+
+#### Environment Variable Reference
+
+| Variable | Purpose | Example |
+|----------|---------|---------|
+| `CLAUDE_PLUGIN_ROOT` | Plugin installation directory | `~/.claude/plugins/cache/bkit/` |
+| `CLAUDE_PROJECT_DIR` | User's project directory | `/Users/user/my-app/` |
+
+#### Absolute Paths to Avoid
+
+```bash
 # ❌ Incorrect - will break after installation
 /Users/kay/plugins/bkit/scripts/setup.sh
 ~/plugins/bkit/scripts/setup.sh
