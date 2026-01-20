@@ -105,4 +105,4 @@ the body with semantic HTML."
 
 ## Reference Skills
 
-Refer to `.claude/skills/starter/SKILL.md` when working
+Refer to `skills/starter/SKILL.md` when working with beginner projects.

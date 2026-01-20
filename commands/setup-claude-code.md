@@ -29,20 +29,7 @@ Solution: Project analysis → Auto-generate settings matching language/structur
 
 ## Tasks Performed
 
-### Step 1: Reference Master Guide
-
-**Must** read the following documents first:
-
-```
-.claude/docs/CLAUDE-CODE-MASTERY.md           # Table of contents and core concepts
-.claude/docs/mastery/01-settings-guide.md     # Detailed guide for each setting element
-.claude/docs/mastery/02-language-templates.md # Language-specific setting templates
-.claude/docs/mastery/03-project-structures.md # Project structure guides
-```
-
-Reference appropriate files based on needed content.
-
-### Step 2: Project Analysis
+### Step 1: Project Analysis
 
 ```bash
 # Analysis targets
@@ -54,7 +41,7 @@ Reference appropriate files based on needed content.
 6. .prettierrc → Formatter settings
 ```
 
-### Step 3: Identify Tech Stack
+### Step 2: Identify Tech Stack
 
 | Item | How to Check |
 |------|-------------|
@@ -64,7 +51,7 @@ Reference appropriate files based on needed content.
 | Monorepo | pnpm-workspace.yaml, turbo.json, lerna.json |
 | Test tool | vitest, jest, mocha, etc. |
 
-### Step 4: Determine Configuration Scale
+### Step 3: Determine Configuration Scale
 
 ```markdown
 ## Scale Determination Criteria
@@ -83,11 +70,11 @@ Reference appropriate files based on needed content.
 - External system integration needed
 ```
 
-### Step 5: File Generation
+### Step 4: File Generation
 
 #### 5.1 Generate CLAUDE.md (Always)
 
-**Template reference**: `.claude/templates/CLAUDE.template.md`
+**Template reference**: `templates/CLAUDE.template.md`
 
 **Variable substitution list**:
 
@@ -328,13 +315,13 @@ docs/
 ```
 
 **Template references**:
-- `.claude/templates/plan.template.md` → For docs/01-plan/ documents
-- `.claude/templates/design.template.md` → For docs/02-design/ documents
-- `.claude/templates/analysis.template.md` → For docs/03-analysis/ documents
-- `.claude/templates/report.template.md` → For docs/04-report/ documents
-- `.claude/templates/_INDEX.template.md` → For each folder index
+- `templates/plan.template.md` → For docs/01-plan/ documents
+- `templates/design.template.md` → For docs/02-design/ documents
+- `templates/analysis.template.md` → For docs/03-analysis/ documents
+- `templates/report.template.md` → For docs/04-report/ documents
+- `templates/_INDEX.template.md` → For each folder index
 
-### Step 6: Merge with Existing Settings
+### Step 5: Merge with Existing Settings
 
 - Don't overwrite already existing files
 - Only add new items or request user confirmation
@@ -368,17 +355,6 @@ docs/
 - If no package.json, create with default npm settings
 - For custom settings, modify manually after generation
 
-## Reference Documents
+## Reference
 
-### Claude Code Mastery
-- .claude/docs/CLAUDE-CODE-MASTERY.md
-- .claude/docs/mastery/01-settings-guide.md (includes MCP recommendation strategy)
-
-### PDCA Methodology
-- .claude/docs/pdca/overview.md
-- .claude/templates/ (Document templates)
-
-### Level Guides
-- .claude/docs/levels/starter-guide.md
-- .claude/docs/levels/dynamic-guide.md
-- .claude/docs/levels/enterprise-guide.md
+- `templates/` - Document templates for PDCA methodology

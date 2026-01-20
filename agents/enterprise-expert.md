@@ -23,9 +23,7 @@ tools:
   - Task
   - WebSearch
 skills:
-  - ai-native-development
   - enterprise
-  - monorepo-architecture
 ---
 
 # Enterprise Expert Agent
@@ -223,7 +221,4 @@ Watch for these failure indicators:
 
 ## Reference Skills
 
-- `.claude/skills/ai-native-development/SKILL.md` - Core methodology
-- `.claude/skills/enterprise/SKILL.md` - Technical patterns
-- `.claude/skills/monorepo-architecture/SKILL.md` - Context control
-- `.claude/docs/ai-native/ai-native-guide.md` - Comprehensive guide
+Refer to `skills/enterprise/SKILL.md` when working with Enterprise-level projects.

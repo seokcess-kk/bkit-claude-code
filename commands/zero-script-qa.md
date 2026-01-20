@@ -166,7 +166,5 @@ Report generated at `docs/03-analysis/zero-script-qa-{date}.md` after verificati
 
 ## Reference
 
-- `.claude/skills/zero-script-qa/SKILL.md`: Expert knowledge
-- `.claude/agents/qa-monitor.md`: QA monitoring agent
-- `.claude/templates/pipeline/zero-script-qa.template.md`: Report template
-- `.claude/instructions/zero-script-qa-rules.md`: Auto-applied rules
+- `skills/zero-script-qa/SKILL.md`: Expert knowledge
+- `agents/qa-monitor.md`: QA monitoring agent

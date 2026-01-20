@@ -158,4 +158,4 @@ Asynchronous Communication: Message Queue
 
 ## Reference Skills
 
-Refer to `.claude/skills/enterprise/SKILL.md` when working
+Refer to `skills/enterprise/SKILL.md` when working with infrastructure tasks.

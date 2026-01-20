@@ -27,9 +27,9 @@ Starts the Development Pipeline guide.
 
 ## Reference
 
-- `.claude/skills/development-pipeline/`: Complete Pipeline knowledge
-- `.claude/agents/pipeline-guide.md`: Guide agent
-- `.claude/templates/pipeline/`: Templates per Phase
+- `skills/development-pipeline/`: Complete Pipeline knowledge
+- `agents/pipeline-guide.md`: Guide agent
+- `templates/pipeline/`: Templates per Phase
 
 ## Cautions
 

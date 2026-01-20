@@ -14,7 +14,7 @@ Receives feature name via $ARGUMENTS. (e.g., /pdca-plan login)
    - If exists, confirm whether to update
 
 2. **Apply Template**
-   - Use .claude/templates/plan.template.md
+   - Use templates/plan.template.md
    - Variable substitution:
      - `{feature}` → $ARGUMENTS
      - `{date}` → Today's date

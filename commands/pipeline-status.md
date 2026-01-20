@@ -58,5 +58,5 @@ Remaining Phases:
 
 ## Reference
 
-- `.claude/skills/development-pipeline/`: Pipeline knowledge
-- `.claude/skills/phase-*/`: Completion criteria per Phase
+- `skills/development-pipeline/`: Pipeline knowledge
+- `skills/phase-*/`: Completion criteria per Phase
