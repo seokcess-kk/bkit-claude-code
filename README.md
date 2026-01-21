@@ -124,6 +124,8 @@ bkit-claude-code/
 
 After installing bkit via the marketplace, you can customize any component by copying it to your project's `.claude/` folder.
 
+> **Comprehensive Guide**: See **[CUSTOMIZATION-GUIDE.md](CUSTOMIZATION-GUIDE.md)** for detailed instructions on customizing bkit for your organization, including platform-specific paths, component examples, and license attribution requirements.
+
 ### How It Works
 
 Claude Code searches for configuration files in this priority order:
@@ -165,6 +167,7 @@ git commit -m "feat: customize bkit starter skill"
 - **Customized files don't receive plugin updates.** When bkit is updated, your customized files remain unchanged while non-customized files are updated automatically.
 - **Check the [CHANGELOG](CHANGELOG.md)** periodically for updates that might affect your customizations.
 - **Delete a customized file** to revert to the plugin's default version.
+- **Attribution required**: When creating derivative plugins, follow the [License & Attribution](CUSTOMIZATION-GUIDE.md#license--attribution) guidelines.
 
 ---
 
@@ -220,6 +223,14 @@ bkit is **primarily designed for software development**. However, some component
 ---
 
 ## Documentation
+
+### Customization Guide
+
+- **[CUSTOMIZATION-GUIDE.md](CUSTOMIZATION-GUIDE.md)** - Complete guide to customizing bkit for your organization
+  - Platform-specific configuration paths (macOS, Linux, Windows, WSL)
+  - Component customization (agents, skills, commands, hooks, templates)
+  - License attribution requirements for derivative works
+  - bkit design philosophy and architecture decisions
 
 ### Current Reference (bkit-system/)
 
