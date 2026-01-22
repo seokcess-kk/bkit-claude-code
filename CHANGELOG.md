@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.3] - 2026-01-22
+
+### Added
+- **Claude Code 2.1.15 Impact Analysis**: Added version compatibility documentation
+  - `docs/pdca/03-analysis/12-claude-code-2.1.15-impact-analysis.md`
+  - npm installation deprecation notice (use `claude install` instead)
+  - MCP stdio server timeout fix analysis
+  - UI rendering performance improvements
+
+### Changed
+- **README Badge Update**: Claude Code version badge updated to v2.1.15+
+  - Link updated to official getting-started documentation
+
+### Compatibility
+- **Minimum Claude Code Version**: 2.1.12
+- **Recommended Claude Code Version**: 2.1.15
+- All 2.1.14 improvements (98% context, parallel agents, memory fix) remain available
+
+---
+
 ## [1.2.2] - 2026-01-21
 
 ### Changed
