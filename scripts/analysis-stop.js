@@ -19,4 +19,5 @@ Next steps:
 3. If match rate >= 90%: Proceed to next phase
 4. Update design doc if implementation differs intentionally`;
 
-outputAllow(message);
+// v1.4.0: Stop hook에 맞는 스키마 사용
+outputAllow(message, 'Stop');

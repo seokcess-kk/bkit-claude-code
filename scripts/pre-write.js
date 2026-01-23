@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 /**
- * pre-write.js - Unified PreToolUse hook for Write|Edit operations (v1.3.1)
+ * pre-write.js - Unified PreToolUse/BeforeTool hook for Write|Edit operations (v1.4.0)
+ * Supports: Claude Code (PreToolUse), Gemini CLI (BeforeTool)
  *
  * Purpose: PDCA check, task classification, convention hints
- * Hook: PreToolUse (Write|Edit)
+ * Hook: PreToolUse (Claude Code) / BeforeTool (Gemini CLI)
  * Philosophy: Automation First - Guide, don't block
+ *
+ * v1.4.0 Changes:
+ * - Added debug logging for hook verification
+ * - Added PDCA status update for "do" phase
  *
  * Converted from: scripts/pre-write.sh
  */
@@ -22,15 +27,21 @@ const {
   getPdcaLevel,
   outputAllow,
   outputEmpty,
-  generateTaskGuidance
+  generateTaskGuidance,
+  debugLog,
+  updatePdcaStatus
 } = require('../lib/common.js');
 
 // Read input from stdin
 const input = readStdinSync();
 const { filePath, content } = parseHookInput(input);
 
+// Debug log hook execution
+debugLog('PreToolUse', 'Hook started', { filePath: filePath || 'none' });
+
 // Skip if no file path
 if (!filePath) {
+  debugLog('PreToolUse', 'Skipped - no file path');
   outputEmpty();
   process.exit(0);
 }
@@ -64,6 +75,17 @@ if (isSourceFile(filePath)) {
   if (feature) {
     designDoc = findDesignDoc(feature);
     planDoc = findPlanDoc(feature);
+
+    // Update PDCA status to "do" phase when source file is being written
+    updatePdcaStatus(feature, 'do', {
+      lastFile: filePath
+    });
+
+    debugLog('PreToolUse', 'PDCA status updated', {
+      feature,
+      phase: 'do',
+      hasDesignDoc: !!designDoc
+    });
   }
 }
 
@@ -128,8 +150,16 @@ if (feature && (pdcaLevel === 'recommended' || pdcaLevel === 'required')) {
 // ============================================================
 // Output combined context
 // ============================================================
+debugLog('PreToolUse', 'Hook completed', {
+  classification,
+  pdcaLevel,
+  feature: feature || 'none',
+  contextCount: contextParts.length
+});
+
 if (contextParts.length > 0) {
-  outputAllow(contextParts.join(' | '));
+  // v1.4.0: PreToolUse hook에 맞는 스키마 사용
+  outputAllow(contextParts.join(' | '), 'PreToolUse');
 } else {
   outputEmpty();
 }

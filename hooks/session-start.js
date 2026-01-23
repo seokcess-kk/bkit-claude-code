@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 /**
- * bkit Vibecoding Kit - SessionStart Hook (v1.3.1)
+ * bkit Vibecoding Kit - SessionStart Hook (v1.4.0)
  * Cross-platform Node.js implementation
+ * Supports: Claude Code, Gemini CLI
+ *
+ * v1.4.0 Changes:
+ * - Added PDCA status initialization
+ * - Using debugLog from common.js
  *
  * Converted from: hooks/session-start.sh
  * Platform: Windows, macOS, Linux
@@ -9,93 +14,45 @@
 
 const fs = require('fs');
 const path = require('path');
+let {
+  BKIT_PLATFORM,
+  detectLevel,
+  isGeminiCli,
+  debugLog,
+  initPdcaStatusIfNotExists,
+  getPdcaStatusFull,
+  // v1.4.0 Automation Functions
+  emitUserPrompt,
+  detectNewFeatureIntent,
+  matchImplicitAgentTrigger,
+  matchImplicitSkillTrigger,
+  getBkitConfig,
+  // v1.4.0 P2: Ambiguity Detection Integration
+  calculateAmbiguityScore,
+  generateClarifyingQuestions
+} = require('../lib/common.js');
 
-// Debug logging
-const debugLog = (message) => {
-  try {
-    const logPath = process.platform === 'win32'
-      ? path.join(process.env.TEMP || 'C:\\Temp', 'bkit-hook-debug.log')
-      : '/tmp/bkit-hook-debug.log';
-    const timestamp = new Date().toISOString();
-    fs.appendFileSync(logPath, `[${timestamp}] ${message}\n`);
-  } catch (e) {
-    // Ignore logging errors
+// Force-detect Gemini if gemini-extension.json exists (Fix for stale BKIT_PLATFORM)
+try {
+  const extensionJsonPath = path.join(__dirname, '../gemini-extension.json');
+  if (BKIT_PLATFORM !== 'gemini' && fs.existsSync(extensionJsonPath) && !process.env.CLAUDE_PROJECT_DIR) {
+    const oldPlatform = BKIT_PLATFORM;
+    BKIT_PLATFORM = 'gemini';
+    isGeminiCli = () => true;
+    debugLog('SessionStart', 'Platform override', { from: oldPlatform, to: 'gemini' });
   }
-};
-
-debugLog(`SessionStart hook executed in ${process.cwd()}`);
-
-/**
- * Detect project level from file structure
- * @returns {string} "starter" | "dynamic" | "enterprise"
- */
-function detectProjectLevel() {
-  const cwd = process.cwd();
-
-  // Check for Enterprise level indicators
-  const enterpriseIndicators = [
-    'infra/terraform',
-    'infra/k8s',
-    'kubernetes'
-  ];
-
-  for (const indicator of enterpriseIndicators) {
-    if (fs.existsSync(path.join(cwd, indicator))) {
-      return 'enterprise';
-    }
-  }
-
-  // Check docker-compose + services
-  if (fs.existsSync(path.join(cwd, 'docker-compose.yml')) &&
-    fs.existsSync(path.join(cwd, 'services'))) {
-    return 'enterprise';
-  }
-
-  // Check for Dynamic level indicators
-  const dynamicIndicators = [
-    'src/features',
-    'src/services',
-    'lib/bkend',
-    'supabase'
-  ];
-
-  for (const indicator of dynamicIndicators) {
-    if (fs.existsSync(path.join(cwd, indicator))) {
-      return 'dynamic';
-    }
-  }
-
-  // Check .env files for dynamic patterns
-  const envFiles = ['.env', '.env.local'];
-  for (const envFile of envFiles) {
-    const envPath = path.join(cwd, envFile);
-    if (fs.existsSync(envPath)) {
-      try {
-        const content = fs.readFileSync(envPath, 'utf8');
-        if (/NEXT_PUBLIC_|DATABASE_|AUTH_/.test(content)) {
-          return 'dynamic';
-        }
-      } catch (e) {
-        // Ignore read errors
-      }
-    }
-  }
-
-  // Check package.json for dynamic dependencies
-  const packagePath = path.join(cwd, 'package.json');
-  if (fs.existsSync(packagePath)) {
-    try {
-      const content = fs.readFileSync(packagePath, 'utf8');
-      if (/prisma|mongoose|@tanstack\/react-query/.test(content)) {
-        return 'dynamic';
-      }
-    } catch (e) {
-      // Ignore read errors
-    }
-  }
-
-  return 'starter';
+} catch (e) {
+  // Ignore detection errors
 }
+
+// Log session start
+debugLog('SessionStart', 'Hook executed', {
+  cwd: process.cwd(),
+  platform: BKIT_PLATFORM
+});
+
+// Initialize PDCA status file if not exists
+initPdcaStatusIfNotExists();
 
 /**
  * Detect current PDCA phase from status file
@@ -119,98 +76,278 @@ function detectPdcaPhase() {
   return '1';
 }
 
-// Persist environment variables if CLAUDE_ENV_FILE is available
-const envFile = process.env.CLAUDE_ENV_FILE;
+/**
+ * v1.4.0: Enhanced Onboarding with PDCA Status Check
+ * Checks for existing work and generates appropriate prompts
+ * @returns {object} Onboarding response data
+ */
+function enhancedOnboarding() {
+  const pdcaStatus = getPdcaStatusFull();
+  const level = detectLevel();
+  const config = getBkitConfig();
+
+  debugLog('SessionStart', 'Enhanced onboarding', {
+    hasActiveFeatures: pdcaStatus.activeFeatures?.length > 0,
+    level,
+    primaryFeature: pdcaStatus.primaryFeature
+  });
+
+  // 1. Check for existing work
+  if (pdcaStatus.activeFeatures && pdcaStatus.activeFeatures.length > 0) {
+    const primary = pdcaStatus.primaryFeature;
+    const featureData = pdcaStatus.features?.[primary];
+    const phase = featureData?.phase || 'plan';
+    const matchRate = featureData?.matchRate;
+
+    // Phase display mapping
+    const phaseDisplay = {
+      'plan': 'Plan (계획)',
+      'design': 'Design (설계)',
+      'do': 'Do (구현)',
+      'check': 'Check (검증)',
+      'act': 'Act (개선)',
+      'completed': 'Completed (완료)'
+    };
+
+    return {
+      type: 'resume',
+      hasExistingWork: true,
+      primaryFeature: primary,
+      phase: phase,
+      matchRate: matchRate,
+      prompt: emitUserPrompt({
+        questions: [{
+          question: `이전 작업이 있습니다. 어떻게 할까요?\n현재: "${primary}" - ${phaseDisplay[phase] || phase}${matchRate ? ` (${matchRate}%)` : ''}`,
+          header: 'Resume',
+          options: [
+            { label: `${primary} 계속`, description: `${phaseDisplay[phase] || phase} 단계 이어하기` },
+            { label: '새 작업 시작', description: '다른 기능 개발' },
+            { label: '상태 확인', description: 'PDCA 현황 보기 (/pdca-status)' }
+          ],
+          multiSelect: false
+        }]
+      }),
+      suggestedAction: matchRate && matchRate < 90 ? '/pdca-iterate' : '/pdca-status'
+    };
+  }
+
+  // 2. New user onboarding
+  return {
+    type: 'new_user',
+    hasExistingWork: false,
+    level: level,
+    prompt: emitUserPrompt({
+      questions: [{
+        question: '무엇을 도와드릴까요?',
+        header: 'Help Type',
+        options: [
+          { label: 'bkit 학습', description: '소개 및 9단계 파이프라인' },
+          { label: 'Claude Code 학습', description: '설정 및 사용법' },
+          { label: '새 프로젝트 시작', description: '프로젝트 초기화' },
+          { label: '자유롭게 시작', description: '가이드 없이 진행' }
+        ],
+        multiSelect: false
+      }]
+    })
+  };
+}
+
+/**
+ * v1.4.0 P2: Analyze user request for ambiguity and generate clarifying questions
+ * @param {string} userRequest - User's request text
+ * @param {object} context - Current context (features, phase, etc.)
+ * @returns {object|null} Ambiguity analysis result or null if clear
+ */
+function analyzeRequestAmbiguity(userRequest, context = {}) {
+  if (!userRequest || userRequest.length < 10) {
+    return null;
+  }
+
+  const ambiguityResult = calculateAmbiguityScore(userRequest, context);
+
+  debugLog('SessionStart', 'Ambiguity analysis', {
+    score: ambiguityResult.score,
+    factorsCount: ambiguityResult.factors.length,
+    needsClarification: ambiguityResult.score >= 50
+  });
+
+  if (ambiguityResult.score >= 50 && ambiguityResult.clarifyingQuestions) {
+    return {
+      needsClarification: true,
+      score: ambiguityResult.score,
+      factors: ambiguityResult.factors,
+      questions: ambiguityResult.clarifyingQuestions,
+      prompt: emitUserPrompt({
+        questions: ambiguityResult.clarifyingQuestions.slice(0, 2).map((q, i) => ({
+          question: q,
+          header: `Clarify ${i + 1}`,
+          options: [
+            { label: '네, 그렇습니다', description: '이 해석이 맞습니다' },
+            { label: '아니요', description: '다르게 해석해주세요' },
+            { label: '상세 설명', description: '더 자세히 설명하겠습니다' }
+          ],
+          multiSelect: false
+        }))
+      })
+    };
+  }
+
+  return null;
+}
+
+/**
+ * v1.4.0: Generate trigger keyword reference
+ * @returns {string} Formatted trigger keyword table
+ */
+function getTriggerKeywordTable() {
+  return `
+## 🎯 v1.4.0 자동 트리거 키워드 (8개 언어 지원)
+
+### Agent 트리거
+| 키워드 | Agent | 동작 |
+|--------|-------|------|
+| 검증, verify, 確認, 验证 | gap-detector | Gap 분석 실행 |
+| 개선, improve, 改善, 改进 | pdca-iterator | 자동 개선 반복 |
+| 분석, analyze, 分析, 品質 | code-analyzer | 코드 품질 분석 |
+| 보고서, report, 報告, 报告 | report-generator | 완료 보고서 생성 |
+| 도움, help, 助けて, 帮助 | starter-guide | 초보자 가이드 |
+
+### Skill 트리거 (자동 감지)
+| 키워드 | Skill | 레벨 |
+|--------|-------|------|
+| 정적 웹, static site | starter | Starter |
+| 로그인, fullstack | dynamic | Dynamic |
+| 마이크로서비스, k8s | enterprise | Enterprise |
+| 모바일 앱, React Native | mobile-app | All |
+
+💡 자연어로 말하면 자동으로 적절한 도구가 활성화됩니다.
+`;
+}
+
+// Persist environment variables (cross-platform)
+// Claude Code: CLAUDE_ENV_FILE, Gemini CLI: GEMINI_ENV_FILE
+const envFile = process.env.CLAUDE_ENV_FILE || process.env.GEMINI_ENV_FILE;
 if (envFile) {
-  const detectedLevel = detectProjectLevel();
+  const detectedLevel = detectLevel(); // Uses common.js logic
   const detectedPhase = detectPdcaPhase();
 
   try {
     fs.appendFileSync(envFile, `export BKIT_LEVEL=${detectedLevel}\n`);
     fs.appendFileSync(envFile, `export BKIT_PDCA_PHASE=${detectedPhase}\n`);
+    fs.appendFileSync(envFile, `export BKIT_PLATFORM=${BKIT_PLATFORM}\n`);
   } catch (e) {
     // Ignore write errors
   }
 }
 
-// Output SessionStart hook response
-const response = {
-  systemMessage: "bkit Vibecoding Kit v1.3.2 activated",
-  hookSpecificOutput: {
-    hookEventName: "SessionStart",
-    additionalContext: `# bkit Vibecoding Kit v1.3.2 - Session Startup
+// ============================================================
+// Output Response (Dual Platform) - v1.4.0 Enhanced
+// ============================================================
 
-## 🚨 MANDATORY: Session Start Action
+// Get enhanced onboarding data
+const onboardingData = enhancedOnboarding();
+const triggerTable = getTriggerKeywordTable();
 
-When user sends their first message, you MUST use the **AskUserQuestion tool** to ask the following question.
-Do NOT respond with plain text. You MUST invoke the AskUserQuestion tool.
+if (isGeminiCli()) {
+  // ------------------------------------------------------------
+  // Gemini CLI Output: Plain Text with ANSI Colors
+  // ------------------------------------------------------------
 
-### AskUserQuestion Parameters:
-\`\`\`json
-{
-  "questions": [{
-    "question": "What would you like help with?",
-    "header": "Help Type",
-    "options": [
-      {"label": "Learn bkit", "description": "Introduction and 9-stage pipeline"},
-      {"label": "Learn Claude Code", "description": "Setup and usage guide"},
-      {"label": "Continue Previous Work", "description": "Resume from PDCA status"},
-      {"label": "Start New Project", "description": "Initialize new project"}
-    ],
-    "multiSelect": false
-  }]
-}
-\`\`\`
+  let output = `
+\x1b[36m🤖 bkit Vibecoding Kit v1.4.0 (Gemini Edition)\x1b[0m
+====================================================
+PDCA Cycle & AI-Native Development Environment
+`;
 
-### Actions by Selection:
-- **Learn bkit** → Explain bkit features (PDCA, Pipeline, Levels, Agents, Zero Script QA) AND teach 9-stage development process. Run /pipeline-start if user wants hands-on learning.
-- **Learn Claude Code** → Run /learn-claude-code skill
-- **Continue Previous Work** → Check PDCA status (docs/.pdca-status.json or scan docs/), guide next step
-- **Start New Project** → Ask level selection (Starter/Dynamic/Enterprise), then run /init-starter, /init-dynamic, or /init-enterprise
+  if (onboardingData.hasExistingWork) {
+    // Resume existing work
+    output += `
+\x1b[33m[📋 이전 작업 감지됨]\x1b[0m
+• 기능: \x1b[1m${onboardingData.primaryFeature}\x1b[0m
+• 단계: ${onboardingData.phase}${onboardingData.matchRate ? ` (${onboardingData.matchRate}%)` : ''}
 
-## PDCA Core Rules (Always Apply)
-- New feature request → Check/create design doc first
-- After implementation → Suggest Gap analysis
-- Gap Analysis < 90% → Suggest pdca-iterator for auto-fix
-- Gap Analysis >= 90% → Suggest report-generator for completion
-
-## 🎯 Trigger Keyword Mapping (v1.3.0)
-When user mentions these keywords in conversation, consider using the corresponding agent:
-
-| User Says | Agent to Use | Action |
-|-----------|--------------|--------|
-| 검증, verify, check, 확인 | gap-detector | Run Gap Analysis |
-| 개선, improve, iterate, 고쳐, fix | pdca-iterator | Auto-fix iteration loop |
-| 분석, analyze, quality, 품질 | code-analyzer | Code quality analysis |
-| 보고서, report, summary, 요약 | report-generator | Generate completion report |
-| QA, 테스트, test, 로그 | qa-monitor | Zero Script QA via logs |
-| 설계, design, spec | design-validator | Validate design docs |
-
-## 📏 Task Size Rules (Automation First - v1.3.0)
-PDCA application based on change size (guide, not force):
-
-| Size | Lines | PDCA Level | Action |
-|------|-------|------------|--------|
-| Quick Fix | <10 | None | No guidance needed |
-| Minor Change | <50 | Light | "PDCA optional" mention |
-| Feature | <200 | Recommended | Design doc recommended |
-| Major Feature | >=200 | Required | Design doc strongly recommended |
-
-## 🔄 Check-Act Iteration Loop (v1.3.0)
-\`\`\`
-gap-detector (Check) → Match Rate 확인
-    ├── >= 90% → report-generator (완료)
-    ├── 70-89% → 선택 제공 (수동/자동)
-    └── < 70% → pdca-iterator 권장 (Act)
-                   ↓
-              수정 후 gap-detector 재실행
-                   ↓
-              반복 (최대 5회)
-\`\`\`
-
-💡 Important: Claude is not perfect. Always verify important decisions.`
+\x1b[33m[권장 명령]\x1b[0m
+1. 🔄 이전 작업 계속: \x1b[1m/pdca-status\x1b[0m
+2. ✅ Gap 분석 실행: \x1b[1m/pdca-analyze ${onboardingData.primaryFeature}\x1b[0m
+3. 🆕 새 작업 시작: \x1b[1m/pdca-plan [기능명]\x1b[0m
+`;
+  } else {
+    // New user onboarding
+    output += `
+\x1b[33m[권장 시작 명령]\x1b[0m
+1. 📚 bkit 학습 (9단계 파이프라인): \x1b[1m/pipeline-start\x1b[0m
+2. 🤖 Claude Code 학습 (설정 가이드): \x1b[1m/learn-claude-code\x1b[0m
+3. 🆕 새 프로젝트 시작 (초기화): \x1b[1m/init-starter\x1b[0m
+`;
   }
-};
 
-console.log(JSON.stringify(response));
-process.exit(0);
+  output += `
+\x1b[32m💡 Tip: "검증해줘", "개선해줘" 등 자연어로 요청하면 자동으로 적절한 Agent가 실행됩니다.\x1b[0m
+\x1b[32m   (8개 언어 지원: EN, KO, JA, ZH, ES, FR, DE, IT)\x1b[0m
+`;
+
+  console.log(output);
+  process.exit(0);
+
+} else {
+  // ------------------------------------------------------------
+  // Claude Code Output: JSON with Tool Call Prompt
+  // ------------------------------------------------------------
+
+  // Build context based on onboarding type
+  let additionalContext = `# bkit Vibecoding Kit v1.4.0 - Session Startup\n\n`;
+
+  if (onboardingData.hasExistingWork) {
+    additionalContext += `## 🔄 이전 작업 감지됨\n\n`;
+    additionalContext += `- **기능**: ${onboardingData.primaryFeature}\n`;
+    additionalContext += `- **현재 단계**: ${onboardingData.phase}\n`;
+    if (onboardingData.matchRate) {
+      additionalContext += `- **매치율**: ${onboardingData.matchRate}%\n`;
+    }
+    additionalContext += `\n### 🚨 MANDATORY: 사용자 첫 메시지에 AskUserQuestion 호출\n\n`;
+    additionalContext += `${onboardingData.prompt}\n\n`;
+    additionalContext += `### 선택별 동작:\n`;
+    additionalContext += `- **${onboardingData.primaryFeature} 계속** → /pdca-status 실행 후 다음 단계 안내\n`;
+    additionalContext += `- **새 작업 시작** → 새 기능명 질문 후 /pdca-plan 실행\n`;
+    additionalContext += `- **상태 확인** → /pdca-status 실행\n\n`;
+  } else {
+    additionalContext += `## 🚨 MANDATORY: Session Start Action\n\n`;
+    additionalContext += `사용자 첫 메시지에 **AskUserQuestion tool** 호출 필수.\n\n`;
+    additionalContext += `${onboardingData.prompt}\n\n`;
+    additionalContext += `### 선택별 동작:\n`;
+    additionalContext += `- **bkit 학습** → /pipeline-start 실행\n`;
+    additionalContext += `- **Claude Code 학습** → /learn-claude-code 실행\n`;
+    additionalContext += `- **새 프로젝트 시작** → 레벨 선택 후 /init-starter, /init-dynamic, /init-enterprise 실행\n`;
+    additionalContext += `- **자유롭게 시작** → 일반 대화 모드\n\n`;
+  }
+
+  additionalContext += `## PDCA Core Rules (Always Apply)\n`;
+  additionalContext += `- 새 기능 요청 → Plan/Design 문서 먼저 확인/생성\n`;
+  additionalContext += `- 구현 후 → Gap 분석 제안\n`;
+  additionalContext += `- Gap Analysis < 90% → pdca-iterator로 자동 개선\n`;
+  additionalContext += `- Gap Analysis >= 90% → report-generator로 완료 보고서\n\n`;
+
+  additionalContext += triggerTable;
+  additionalContext += `\n\n## v1.4.0 자동화 기능\n`;
+  additionalContext += `- 🎯 8개 언어 자동 감지: EN, KO, JA, ZH, ES, FR, DE, IT\n`;
+  additionalContext += `- 🤖 암시적 Agent/Skill 트리거\n`;
+  additionalContext += `- 📊 모호성 감지 및 명확화 질문 생성\n`;
+  additionalContext += `- 🔄 PDCA 자동 페이즈 진행\n\n`;
+  additionalContext += `💡 Important: AI Agent is not perfect. Always verify important decisions.`;
+
+  const response = {
+    systemMessage: `bkit Vibecoding Kit v1.4.0 activated (Claude Code)`,
+    hookSpecificOutput: {
+      hookEventName: "SessionStart",
+      onboardingType: onboardingData.type,
+      hasExistingWork: onboardingData.hasExistingWork,
+      primaryFeature: onboardingData.primaryFeature || null,
+      currentPhase: onboardingData.phase || null,
+      matchRate: onboardingData.matchRate || null,
+      additionalContext: additionalContext
+    }
+  };
+
+  console.log(JSON.stringify(response));
+  process.exit(0);
+}

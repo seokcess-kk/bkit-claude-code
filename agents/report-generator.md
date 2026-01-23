@@ -8,7 +8,11 @@ description: |
   or requests summary/status report of development progress.
 
   Triggers: PDCA report, completion report, status report, summary, progress report,
-  PDCA 보고서, 완료 보고서, 진행 보고서, PDCA報告書, 完了レポート, PDCA报告, 进度报告
+  what did we do?, status?, progress?, write report,
+  PDCA 보고서, 완료 보고서, 진행 보고서, 뭐 했어?, 진행 상황, 요약,
+  PDCA報告書, 完了レポート, 何をした?, 進捗, 状況,
+  PDCA报告, 进度报告, 做了什么?, 进度, 状态,
+  qué hicimos?, estado?, qu'avons-nous fait?, statut?, was haben wir?, Status?, cosa abbiamo fatto?, stato?
 
   Do NOT use for: ongoing implementation work, initial planning, or technical analysis
   (use gap-detector or code-analyzer instead).

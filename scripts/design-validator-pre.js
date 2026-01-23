@@ -28,7 +28,8 @@ Validation checklist:
 
 After writing, run validation to check completeness.`;
 
-  outputAllow(message);
+  // v1.4.0: PreToolUse hook에 맞는 스키마 사용
+  outputAllow(message, 'PreToolUse');
 } else {
   outputEmpty();
 }

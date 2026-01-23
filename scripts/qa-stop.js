@@ -18,4 +18,5 @@ Next steps:
 2. Document findings in docs/03-analysis/
 3. Run /pdca-iterate if issues found need fixing`;
 
-outputAllow(message);
+// v1.4.0: Stop hook에 맞는 스키마 사용
+outputAllow(message, 'Stop');

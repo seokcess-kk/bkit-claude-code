@@ -31,14 +31,16 @@ if (isDeployCommand) {
 - Ensure all required environment variables are documented
 - Verify CI/CD secrets are configured`;
 
-    outputAllow(message);
+    // v1.4.0: PreToolUse hook에 맞는 스키마 사용
+    outputAllow(message, 'PreToolUse');
   } else {
     const message = `✅ Pre-deployment Check:
 - .env.example found
 - Verify CI/CD secrets match .env.example
 - Run scripts/check-env.sh if available`;
 
-    outputAllow(message);
+    // v1.4.0: PreToolUse hook에 맞는 스키마 사용
+    outputAllow(message, 'PreToolUse');
   }
 } else {
   outputEmpty();

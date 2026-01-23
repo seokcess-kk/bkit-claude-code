@@ -35,7 +35,8 @@ const feature = extractFeature(filePath);
 
 // Provide minimal context (main logic is in pre-write.js)
 if (feature) {
-  outputAllow(`PDCA context: Editing ${toolName} for feature '${feature}'.`);
+  // v1.4.0: PreToolUse hook에 맞는 스키마 사용
+  outputAllow(`PDCA context: Editing ${toolName} for feature '${feature}'.`, 'PreToolUse');
 } else {
   outputEmpty();
 }

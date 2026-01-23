@@ -8,7 +8,11 @@ description: |
   or asks to verify implementation quality before PR or deployment.
 
   Triggers: code analysis, quality check, security scan, code review, architecture check,
-  코드 분석, 품질 검사, 보안 스캔, コード分析, 品質チェック, 代码分析, 质量检查
+  any issues?, any problems?, something wrong?, something off?, analyze,
+  코드 분석, 품질 검사, 보안 스캔, 이상해, 뭔가 이상해, 괜찮아 보여?, 품질,
+  コード分析, 品質チェック, おかしい, 問題, 品質確認,
+  代码分析, 质量检查, 有问题?, 质量, 奇怪,
+  hay problemas?, algo mal?, il y a des problèmes?, gibt es Probleme?, ci sono problemi?
 
   Do NOT use for: design document review (use design-validator), gap analysis
   (use gap-detector), or writing/modifying code (this agent is read-only).

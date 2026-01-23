@@ -16,8 +16,11 @@ description: |
   - Stop when Match Rate >= 90% or max iterations reached
   - Report to report-generator when complete
 
-  Triggers: iterate, optimize, auto-fix, 반복 개선, 자동 수정, 고쳐줘, 개선해줘,
-  イテレーション, 自動修正, 迭代优化, 自动修复, automatically fix
+  Triggers: iterate, optimize, auto-fix, improve, fix this, make it better, automatically fix,
+  반복 개선, 자동 수정, 고쳐줘, 개선해줘, 고쳐, 더 좋게, 문제 해결해줘,
+  イテレーション, 自動修正, 改善して, 直して, もっと良く,
+  迭代优化, 自动修复, 改进, 修复, 改善,
+  mejorar, arreglar, améliorer, corriger, verbessern, reparieren, migliorare, correggere
 
   Do NOT use for: initial development, research tasks, design document creation,
   or when user explicitly wants manual control.

@@ -2,12 +2,14 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-v2.1.15+-purple.svg)](https://docs.anthropic.com/en/docs/claude-code/getting-started)
-[![Version](https://img.shields.io/badge/Version-1.3.0-green.svg)](CHANGELOG.md)
+[![Gemini CLI](https://img.shields.io/badge/Gemini%20CLI-v1.0.0+-4285F4.svg)](https://geminicli.dev)
+[![Version](https://img.shields.io/badge/Version-1.4.0-green.svg)](CHANGELOG.md)
 [![Author](https://img.shields.io/badge/Author-POPUP%20STUDIO-orange.svg)](https://popupstudio.ai)
 
-> **PDCA methodology + Claude Code mastery for AI-native development**
+> **PDCA methodology + AI coding assistant mastery for AI-native development**
+> **Dual Platform Support: Claude Code & Gemini CLI**
 
-bkit is a Claude Code plugin that transforms how you build software with AI. It provides structured development workflows, automatic documentation, and intelligent code assistance through the PDCA (Plan-Do-Check-Act) methodology.
+bkit is a plugin/extension that transforms how you build software with AI. It provides structured development workflows, automatic documentation, and intelligent code assistance through the PDCA (Plan-Do-Check-Act) methodology. Now supporting both **Claude Code** and **Gemini CLI**.
 
 ![bkit Introduction](images/bkit-intro.png)
 
@@ -25,7 +27,7 @@ bkit is a Claude Code plugin that transforms how you build software with AI. It 
 - **20 Commands** - Automate common development tasks
 - **18 Skills** - Domain-specific knowledge for various development scenarios
 - **11 Agents** - Specialized AI assistants for different tasks
-- **21 Scripts** - Hook execution and automation scripts
+- **26 Scripts** - Hook execution and automation scripts
 - **Check-Act Iteration Loop** - Automatic gap analysis and fix cycles (v1.3.0+)
 
 ---
@@ -100,24 +102,53 @@ Keep your plugins up-to-date automatically by configuring auto-update in your se
 - Press `r` to remove a marketplace
 - Use `Space` to toggle plugin selection in Discover view
 
-### Plugin Structure
+### Option 2: Gemini CLI Installation
+
+bkit also supports **Gemini CLI** as an extension.
+
+```bash
+# Step 1: Clone the repository
+git clone https://github.com/popup-studio-ai/bkit-claude-code.git ~/.gemini/extensions/bkit
+
+# Step 2: Enable hooks in Gemini CLI settings
+# Add to ~/.gemini/settings.json:
+{
+  "tools": {
+    "enableHooks": true
+  }
+}
+
+# Step 3: Restart Gemini CLI
+```
+
+#### Gemini CLI Specific Features
+
+- **Commands**: Located in `commands/gemini/` (TOML format)
+- **Context File**: `GEMINI.md` (similar to CLAUDE.md)
+- **Hook Mapping**: `BeforeTool`/`AfterTool` instead of `PreToolUse`/`PostToolUse`
+
+### Plugin/Extension Structure
 
 ```
 bkit-claude-code/
 ├── .claude-plugin/
-│   ├── plugin.json          # Plugin manifest
+│   ├── plugin.json          # Claude Code plugin manifest
 │   └── marketplace.json     # Marketplace registry
-├── commands/                # Slash commands
+├── gemini-extension.json    # Gemini CLI extension manifest
+├── GEMINI.md                # Gemini CLI context file
+├── commands/
+│   ├── *.md                 # Claude Code commands (Markdown)
+│   └── gemini/              # Gemini CLI commands (TOML)
 ├── agents/                  # Specialized AI agents
 ├── skills/                  # Domain knowledge
-├── hooks/                   # Event hooks (hooks.json)
-├── scripts/                 # Hook scripts
+├── hooks/                   # Event hooks (hooks.json for Claude)
+├── scripts/                 # Hook scripts (cross-platform)
 ├── lib/                     # Shared utilities
 ├── templates/               # Document templates
 └── bkit.config.json         # Centralized configuration
 ```
 
-> **Note**: The `.claude/` folder is not included in this repository. Plugin elements are located at the root level.
+> **Note**: Both platforms share the same `skills/`, `agents/`, `scripts/`, `lib/`, and `templates/` directories.
 
 ---
 
