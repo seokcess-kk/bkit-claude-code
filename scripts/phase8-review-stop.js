@@ -20,4 +20,5 @@ Review Summary:
 
 Next: Phase 9 (Deployment) when review passes`;
 
-outputAllow(message);
+// v1.4.0: Stop hook에 맞는 스키마 사용
+outputAllow(message, 'Stop');

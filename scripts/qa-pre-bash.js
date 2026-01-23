@@ -37,4 +37,5 @@ for (const pattern of DESTRUCTIVE_PATTERNS) {
 }
 
 // Allow safe commands with context
-outputAllow('QA Testing: Command validated as safe for testing environment.');
+// v1.4.0: PreToolUse hook에 맞는 스키마 사용
+outputAllow('QA Testing: Command validated as safe for testing environment.', 'PreToolUse');

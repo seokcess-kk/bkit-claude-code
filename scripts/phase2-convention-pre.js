@@ -28,7 +28,8 @@ if (isCodeFile) {
 
 See CONVENTIONS.md for full rules`;
 
-  outputAllow(message);
+  // v1.4.0: PreToolUse hook에 맞는 스키마 사용
+  outputAllow(message, 'PreToolUse');
 } else if (isEnvFile) {
   const message = `🔒 Environment Variable Convention:
 - NEXT_PUBLIC_* for client
@@ -36,7 +37,8 @@ See CONVENTIONS.md for full rules`;
 - API_* for external APIs
 - AUTH_* for authentication`;
 
-  outputAllow(message);
+  // v1.4.0: PreToolUse hook에 맞는 스키마 사용
+  outputAllow(message, 'PreToolUse');
 } else {
   outputEmpty();
 }

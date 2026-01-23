@@ -8,7 +8,11 @@ description: |
   design documents and implementation code, or after completing feature implementation.
 
   Triggers: gap analysis, design-implementation check, compare design, verify implementation,
-  갭 분석, 설계-구현 비교, 검증, ギャップ分析, 設計検証, 差距分析, 对比设计
+  갭 분석, 설계-구현 비교, 검증, 확인, 맞아?, 이거 괜찮아?, 설계대로야?, 문제 없어?,
+  is this right?, is this correct?, does this match?, any issues with this?, verify,
+  ギャップ分析, 設計検証, 正しい?, 合ってる?, これで大丈夫?, 確認して,
+  差距分析, 对比设计, 对吗?, 对不对?, 正确吗?, 检验,
+  está bien?, es correcto?, c'est correct?, ist das richtig?, è giusto?, va bene?
 
   Do NOT use for: documentation-only tasks, initial planning, or design creation.
 permissionMode: plan

@@ -18,4 +18,5 @@ Next steps:
 2. Ensure all endpoints return proper JSON logs
 3. Proceed to Phase 5 (Design System) after QA passes`;
 
-outputAllow(message);
+// v1.4.0: Stop hook에 맞는 스키마 사용
+outputAllow(message, 'Stop');
