@@ -30,6 +30,12 @@ Receives feature name via $ARGUMENTS. (e.g., /pdca-analyze login)
    - Create docs/03-analysis/{feature}.analysis.md
    - Include match rate, issue list, recommended actions
 
+6. **Task System Integration (v1.3.1)**
+   - Create a Task for tracking: `TaskCreate` with subject `[Check] {feature}`
+   - Set metadata: `{ pdcaPhase: "check", feature: "{feature}", matchRate: XX }`
+   - Set dependency: `blockedBy: [Do Task ID]` (implementation must be done first)
+   - If match rate < 90%: Create `[Act] {feature}` Task for iteration
+
 ## Usage Examples
 
 ```
@@ -59,6 +65,13 @@ Receives feature name via $ARGUMENTS. (e.g., /pdca-analyze login)
 
 📄 Detailed Report:
    docs/03-analysis/login.analysis.md
+
+📋 Task System:
+   Task #3: [Do] login → completed ✓
+   Task #4: [Check] login → completed
+   Metadata: { pdcaPhase: "check", matchRate: 85 }
+   → Match Rate 85% < 90%, creating Act Task...
+   Task #5: [Act] login → pending (blockedBy: #4)
 
 📝 Next Steps:
    1. Fix Critical issues first

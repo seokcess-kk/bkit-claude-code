@@ -1,10 +1,9 @@
 # Scripts Overview
 
-> 18 Shell Scripts used by bkit hooks (v1.2.3)
+> 21 Node.js Scripts used by bkit hooks (v1.3.1)
 >
-> **Note**: task-classify.sh was removed and merged into pre-write.sh
-> **v1.2.1**: output_block() now exits with code 2 for proper blocking
-> **v1.2.3**: session-start.sh enhanced with AskUserQuestion guidance (see [[../hooks/_hooks-overview]])
+> **v1.3.1**: All scripts converted from Bash (.sh) to Node.js (.js) for cross-platform support
+> **v1.3.0**: session-start.js enhanced with AskUserQuestion guidance (see [[../hooks/_hooks-overview]])
 
 ## What are Scripts?
 
@@ -12,6 +11,7 @@ Scripts are **the actual logic executed by Hooks**.
 - Referenced from hooks/hooks.json and skill frontmatter
 - Receive JSON input via stdin, output JSON via stdout
 - Provide allow/block decisions and additionalContext
+- **Cross-platform**: Windows (Native), macOS, Linux
 
 ## Source Location
 
@@ -20,30 +20,34 @@ All scripts are at root level (not in .claude/):
 ```
 bkit-claude-code/
 ├── lib/
-│   └── common.sh              # Shared utility library
+│   └── common.js              # Shared utility library (Node.js)
+├── hooks/
+│   └── session-start.js       # SessionStart hook
 ├── scripts/
-│   ├── pre-write.sh           # Core: Unified PreToolUse hook (includes task classification)
-│   ├── pdca-post-write.sh     # Core: PostToolUse guidance
-│   ├── select-template.sh     # Core: Template selection
+│   ├── pre-write.js           # Core: Unified PreToolUse hook (includes task classification)
+│   ├── pdca-post-write.js     # Core: PostToolUse guidance
+│   ├── select-template.js     # Core: Template selection
 │   │
-│   ├── phase2-convention-pre.sh   # Phase: Convention check
-│   ├── phase4-api-stop.sh         # Phase: Zero Script QA
-│   ├── phase5-design-post.sh      # Phase: Design token verify
-│   ├── phase6-ui-post.sh          # Phase: Layer separation
-│   ├── phase8-review-stop.sh      # Phase: Review summary
-│   ├── phase9-deploy-pre.sh       # Phase: Deploy validation
+│   ├── phase2-convention-pre.js   # Phase: Convention check
+│   ├── phase4-api-stop.js         # Phase: Zero Script QA
+│   ├── phase5-design-post.js      # Phase: Design token verify
+│   ├── phase6-ui-post.js          # Phase: Layer separation
+│   ├── phase8-review-stop.js      # Phase: Review summary
+│   ├── phase9-deploy-pre.js       # Phase: Deploy validation
 │   │
-│   ├── qa-pre-bash.sh             # QA: Bash setup
-│   ├── qa-monitor-post.sh         # QA: Completion guidance
-│   ├── qa-stop.sh                 # QA: Session cleanup
+│   ├── qa-pre-bash.js             # QA: Bash setup
+│   ├── qa-monitor-post.js         # QA: Completion guidance
+│   ├── qa-stop.js                 # QA: Session cleanup
 │   │
-│   ├── design-validator-pre.sh    # Agent: Design validation
-│   ├── gap-detector-post.sh       # Agent: Gap analysis guidance
-│   ├── analysis-stop.sh           # Agent: Analysis completion
+│   ├── design-validator-pre.js    # Agent: Design validation
+│   ├── gap-detector-post.js       # Agent: Gap analysis guidance
+│   ├── gap-detector-stop.js       # Agent: Gap detector completion (v1.3.0)
+│   ├── iterator-stop.js           # Agent: Iterator completion (v1.3.0)
+│   ├── analysis-stop.js           # Agent: Analysis completion
 │   │
-│   ├── pdca-pre-write.sh          # Legacy (use pre-write.sh)
-│   ├── sync-folders.sh            # Utility: Folder sync
-│   └── validate-plugin.sh         # Utility: Plugin validation
+│   ├── pdca-pre-write.js          # Legacy (use pre-write.js)
+│   ├── sync-folders.js            # Utility: Folder sync
+│   └── validate-plugin.js         # Utility: Plugin validation
 └── bkit.config.json           # Centralized configuration
 ```
 
@@ -53,93 +57,114 @@ bkit-claude-code/
 
 | Script | Hook | Purpose |
 |--------|------|---------|
-| **pre-write.sh** | PreToolUse (Write\|Edit) | Unified hook: PDCA check + task classification + convention hints |
-| **pdca-post-write.sh** | PostToolUse (Write) | Guide next steps, suggest gap analysis |
-| **select-template.sh** | - | Select template based on level and document type |
+| **pre-write.js** | PreToolUse (Write\|Edit) | Unified hook: PDCA check + task classification + convention hints |
+| **pdca-post-write.js** | PostToolUse (Write) | Guide next steps, suggest gap analysis |
+| **select-template.js** | - | Select template based on level and document type |
 
-> **Note**: Task classification logic is now integrated into pre-write.sh via lib/common.sh
+> **Note**: Task classification logic is integrated into pre-write.js via lib/common.js
 
 ### Phase Scripts (6)
 
 | Script | Hook | Phase | Purpose |
 |--------|------|-------|---------|
-| phase2-convention-pre.sh | PreToolUse | Phase 2 | Convention check before write |
-| phase4-api-stop.sh | Stop | Phase 4 | Zero Script QA guidance after API |
-| phase5-design-post.sh | PostToolUse | Phase 5 | Design token verification |
-| phase6-ui-post.sh | PostToolUse | Phase 6 | UI layer separation check |
-| phase8-review-stop.sh | Stop | Phase 8 | Review completion summary |
-| phase9-deploy-pre.sh | PreToolUse | Phase 9 | Deployment environment validation |
+| phase2-convention-pre.js | PreToolUse | Phase 2 | Convention check before write |
+| phase4-api-stop.js | Stop | Phase 4 | Zero Script QA guidance after API |
+| phase5-design-post.js | PostToolUse | Phase 5 | Design token verification |
+| phase6-ui-post.js | PostToolUse | Phase 6 | UI layer separation check |
+| phase8-review-stop.js | Stop | Phase 8 | Review completion summary |
+| phase9-deploy-pre.js | PreToolUse | Phase 9 | Deployment environment validation |
 
 ### QA Scripts (3)
 
 | Script | Hook | Purpose |
 |--------|------|---------|
-| qa-pre-bash.sh | PreToolUse (Bash) | Block destructive commands during QA |
-| qa-monitor-post.sh | PostToolUse | Critical issue notification |
-| qa-stop.sh | Stop | QA session cleanup |
+| qa-pre-bash.js | PreToolUse (Bash) | Block destructive commands during QA |
+| qa-monitor-post.js | PostToolUse | Critical issue notification |
+| qa-stop.js | Stop | QA session cleanup |
 
-### Agent Scripts (3)
+### Agent Scripts (5)
 
 | Script | Hook | Agent(s) | Purpose |
 |--------|------|----------|---------|
-| design-validator-pre.sh | PreToolUse | design-validator | Design document checklist |
-| gap-detector-post.sh | PostToolUse | (legacy) | Post-analysis iteration guidance |
-| analysis-stop.sh | Stop | gap-detector, code-analyzer, pdca-iterator | Analysis completion guidance |
+| design-validator-pre.js | PreToolUse | design-validator | Design document checklist |
+| gap-detector-post.js | PostToolUse | gap-detector | Post-analysis iteration guidance |
+| gap-detector-stop.js | Stop | gap-detector | Check-Act iteration: Match Rate 분기 (v1.3.0) |
+| iterator-stop.js | Stop | pdca-iterator | Check-Act iteration: 완료/계속 안내 (v1.3.0) |
+| analysis-stop.js | Stop | code-analyzer | Analysis completion guidance |
 
 ### Utility Scripts (3)
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
-| pdca-pre-write.sh | Legacy script | Superseded by pre-write.sh |
-| sync-folders.sh | Folder synchronization | Manual maintenance |
-| validate-plugin.sh | Plugin validation | CI/CD or manual |
+| pdca-pre-write.js | Legacy script | Superseded by pre-write.js |
+| sync-folders.js | Folder synchronization | Manual maintenance |
+| validate-plugin.js | Plugin validation | CI/CD or manual |
 
-## Shared Library: lib/common.sh
+## Shared Library: lib/common.js
 
-All scripts can source common utilities:
+All scripts can require common utilities:
 
-```bash
-source "${CLAUDE_PLUGIN_ROOT}/lib/common.sh"
+```javascript
+#!/usr/bin/env node
+const common = require('../lib/common.js');
 
-# Configuration
-get_config ".pdca.thresholds.quickFix" "50"   # Read config value
-get_config_array ".sourceDirectories"          # Read array value
+// Input Helpers
+const input = common.readStdinSync();             // Synchronous JSON from stdin
+const { toolName, filePath } = common.parseHookInput(input);
 
-# File Classification (Multi-Language Support v1.2.1)
-is_source_file "/path/to/file"                 # Negative pattern + extension detection
-is_code_file "/path/to/file.ts"                # Check 20+ language extensions
-is_ui_file "/path/to/Component.tsx"            # Check UI component (.tsx, .jsx, .vue, .svelte)
-is_env_file "/path/to/.env.local"              # Check env file
+// Configuration
+const quickFix = common.getConfig('.pdca.thresholds.quickFix', 50);
+const sourceDirs = common.getConfigArray('.sourceDirectories');
 
-# Feature Detection (Multi-Language Support v1.2.1)
-extract_feature "/src/features/auth/login.ts"  # Next.js features/
-extract_feature "/internal/auth/handler.go"    # Go internal/
-extract_feature "/app/routers/users.py"        # Python routers/
-find_design_doc "auth"                         # Find design document
-find_plan_doc "auth"                           # Find plan document
+// File Classification (Multi-Language Support)
+common.isSourceFile('/path/to/file');             // Negative pattern + extension detection
+common.isCodeFile('/path/to/file.ts');            // Check 30+ language extensions
+common.isUiFile('/path/to/Component.tsx');        // Check UI component (.tsx, .jsx, .vue, .svelte, .astro)
+common.isEnvFile('/path/to/.env.local');          // Check env file
 
-# Task Classification
-classify_task "$content"                       # Classify by size
-get_pdca_guidance "feature"                    # Get PDCA guidance
+// Feature Detection (Multi-Language Support)
+common.extractFeature('/src/features/auth/login.ts');  // Next.js features/
+common.extractFeature('/internal/auth/handler.go');    // Go internal/
+common.extractFeature('/app/routers/users.py');        // Python routers/
+common.findDesignDoc('auth');                          // Find design document
+common.findPlanDoc('auth');                            // Find plan document
 
-# Level Detection
-detect_level                                   # Starter/Dynamic/Enterprise
+// Task Classification
+common.classifyTask(content);                     // Classify by size
+common.getPdcaGuidance('feature');                // Get PDCA guidance
 
-# JSON Output
-output_allow "context message"                 # Allow with context
-output_block "block reason"                    # Block with reason (exits with code 2)
-output_empty                                   # Empty response {}
+// Level Detection
+common.detectLevel();                             // Starter/Dynamic/Enterprise
+
+// Language Tier
+const tier = common.getLanguageTier('file.ts');   // 1-4, 'experimental', 'unknown'
+const desc = common.getTierDescription(tier);     // 'AI-Native Essential', etc.
+
+// JSON Output
+common.outputAllow('context message');            // Allow with context
+common.outputBlock('block reason');               // Block with reason
+common.outputEmpty();                             // Empty response {}
+
+// Task System Integration (v1.3.1)
+const { PDCA_PHASES } = common;                   // Phase definitions
+common.getPdcaTaskMetadata('design', 'login');    // { pdcaPhase, pdcaOrder, feature, ... }
+common.generatePdcaTaskSubject('design', 'login');  // "[Design] login"
+common.generatePdcaTaskDescription('design', 'login'); // Full description
+common.generateTaskGuidance('design', 'login');   // Guidance for additionalContext
+common.getPreviousPdcaPhase('check');             // → 'do'
+common.findPdcaStatus();                          // Read docs/.pdca-status.json
+common.getCurrentPdcaPhase('login');              // Get current phase
 ```
 
-### Configurable Patterns (v1.2.1)
+### Configurable Patterns
 
-```bash
-# Override via environment variable
-BKIT_EXCLUDE_PATTERNS="node_modules .git dist build __pycache__ .venv target vendor"
-BKIT_FEATURE_PATTERNS="features modules packages apps services domains"
+```javascript
+// Override via environment variable
+process.env.BKIT_EXCLUDE_PATTERNS = 'node_modules .git dist build __pycache__ .venv target vendor';
+process.env.BKIT_FEATURE_PATTERNS = 'features modules packages apps services domains';
 ```
 
-### Supported Languages by Tier (v1.2.1)
+### Supported Languages by Tier
 
 #### Tier 1: AI-Native Essential
 | Language | Extensions | AI Compatibility |
@@ -227,7 +252,7 @@ JSON from PreToolUse/PostToolUse:
 
 ## Key Script Details
 
-### pre-write.sh (Unified Hook)
+### pre-write.js (Unified Hook)
 
 ```
 Trigger: Write|Edit on source files
@@ -255,7 +280,7 @@ Actions (3 stages):
 Output: All context combined into single JSON response
 ```
 
-### qa-pre-bash.sh
+### qa-pre-bash.js
 
 ```
 Trigger: Bash commands during zero-script-qa
@@ -267,11 +292,11 @@ Actions:
 3. If safe → allow with "Safe in QA environment"
 ```
 
-### phase5-design-post.sh
+### phase5-design-post.js
 
 ```
-Trigger: Write on UI component files (extension-based detection v1.2.1)
-         Detects: .tsx, .jsx, .vue, .svelte files using is_ui_file()
+Trigger: Write on UI component files (extension-based detection)
+         Detects: .tsx, .jsx, .vue, .svelte, .astro files using isUiFile()
 
 Actions:
 1. Search for hardcoded colors in content
@@ -281,33 +306,35 @@ Actions:
 3. If clean → "Design tokens correctly used" confirmation
 ```
 
-## Script Writing Guide
+## Script Writing Guide (Node.js)
 
 ### Required Elements
 
-```bash
-#!/bin/bash
-set -e  # Exit on error
+```javascript
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
 
-# Source common utilities
-source "${CLAUDE_PLUGIN_ROOT}/lib/common.sh"
+// Source common utilities
+const common = require(path.join(process.env.CLAUDE_PLUGIN_ROOT, 'lib', 'common.js'));
 
-# Read JSON from stdin
-INPUT=$(cat)
-FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // ""')
+// Read JSON from stdin
+const input = common.readStdinSync();
+const { filePath } = common.parseHookInput(input);
 
-# Logic...
+// Logic...
 
-# Must output JSON
-output_allow "Guidance message"
+// Must output JSON
+common.outputAllow('Guidance message');
 ```
 
 ### Best Practices
 
 1. **Early exit**: Return `{}` quickly for irrelevant files
-2. **Use jq**: Parse JSON with jq
+2. **Use JSON.parse**: Parse JSON safely with try/catch
 3. **Minimize blocks**: Allow is default, block only when truly dangerous
 4. **Concise messages**: Keep additionalContext brief
+5. **Cross-platform**: Use path.join() for file paths
 
 ## Related Documents
 

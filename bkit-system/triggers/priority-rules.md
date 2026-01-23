@@ -10,8 +10,8 @@ Claude Code는 여러 hooks가 동시에 매칭될 때 **모두 실행**합니�
 ### PreToolUse 실행 순서 (Write|Edit)
 
 ```
-1. bkit-rules → pre-write.sh (PDCA check + task classification)
-2. phase-2-convention → phase2-convention-pre.sh
+1. bkit-rules → pre-write.js (PDCA check + task classification)
+2. phase-2-convention → phase2-convention-pre.js
 3. (특정 agent 활성화 시) design-validator, code-analyzer
 ```
 
@@ -23,7 +23,7 @@ Claude Code는 여러 hooks가 동시에 매칭될 때 **모두 실행**합니�
 
 | Script | Block 조건 |
 |--------|-----------|
-| `qa-pre-bash.sh` | 파괴적 명령어 (rm -rf, DROP TABLE 등) |
+| `qa-pre-bash.js` | 파괴적 명령어 (rm -rf, DROP TABLE 등) |
 | `code-analyzer` agent | Write/Edit 시도 (read-only agent) |
 
 ---
@@ -99,7 +99,7 @@ Skills는 다음 조건으로 활성화됩니다:
 상황: src/features/auth/login.ts 파일 Write
 
 발동:
-1. pre-write.sh → "auth feature의 design doc 확인" + "Feature 크기, PDCA 권장"
+1. pre-write.js → "auth feature의 design doc 확인" + "Feature 크기, PDCA 권장"
 2. phase-2-convention → "TypeScript 컨벤션 리마인드"
 
 결과: 2개의 additionalContext가 모두 Claude에게 전달
@@ -112,7 +112,7 @@ Claude는 이를 종합하여 사용자에게 안내
 상황: rm -rf /tmp/* 명령 실행 (QA 중)
 
 발동:
-1. qa-pre-bash.sh → 파괴적 패턴 감지
+1. qa-pre-bash.js → 파괴적 패턴 감지
 2. "decision": "block" 반환
 
 결과: 명령 실행 차단, 이유 안내

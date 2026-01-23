@@ -11,6 +11,8 @@
 > **v1.2.3 SessionStart Enhancement**: AskUserQuestion guidance with 4 options for session initialization
 >
 > **v1.3.0 Check-Act Iteration Loop**: Automatic gap analysis and fix cycles with pdca-iterator agent
+>
+> **v1.3.1 Cross-Platform**: All hooks converted from Bash (.sh) to Node.js (.js) for Windows/Mac/Linux compatibility
 
 ## Philosophy (3)
 
@@ -50,8 +52,8 @@ Core design principles and methodology:
 
 ### Removed Skills (v1.2.0)
 The following skills were consolidated:
-- ~~task-classification~~ → `lib/common.sh`
-- ~~level-detection~~ → `lib/common.sh`
+- ~~task-classification~~ → `lib/common.js`
+- ~~level-detection~~ → `lib/common.js`
 - ~~pdca-methodology~~ → `bkit-rules`
 - ~~document-standards~~ → `bkit-templates`
 - ~~evaluator-optimizer~~ → `/pdca-iterate` command
@@ -76,7 +78,7 @@ The following skills were consolidated:
 - [[../agents/pdca-iterator|pdca-iterator]] - Iteration optimizer (Evaluator-Optimizer pattern)
 - [[../agents/report-generator|report-generator]] - Report generation
 
-## Commands (18)
+## Commands (20)
 
 ### Initialization
 - `/init-starter` - Initialize Starter level project
@@ -103,6 +105,8 @@ The following skills were consolidated:
 - `/setup-claude-code` - Generate project settings
 - `/upgrade-claude-code` - Upgrade settings
 - `/upgrade-level` - Upgrade project level
+- `/archive` - Archive completed PDCA documents
+- `/github-stats` - Collect GitHub repository statistics
 
 ## Hooks (3 events)
 
@@ -113,54 +117,66 @@ The following skills were consolidated:
 - [[components/hooks/_hooks-overview|PreToolUse]] - Before Write/Edit operations (defined in SKILL.md)
 - [[components/hooks/_hooks-overview|PostToolUse]] - After Write operations (defined in SKILL.md)
 
-## Scripts (18)
+## Scripts (21)
 
-> **Note**: Scripts reduced from 19 to 18 (task-classify.sh removed in v1.2.0, merged into pre-write.sh)
+> **Note**: All scripts converted to Node.js (.js) in v1.3.1 for cross-platform compatibility
 
 ### Core Scripts
-- `scripts/pre-write.sh` - Unified PreToolUse hook (PDCA + classification + convention)
-- `scripts/pdca-post-write.sh` - PostToolUse guidance after Write
-- `scripts/select-template.sh` - Template selection by level
+- `scripts/pre-write.js` - Unified PreToolUse hook (PDCA + classification + convention)
+- `scripts/pdca-post-write.js` - PostToolUse guidance after Write
+- `scripts/select-template.js` - Template selection by level
 
 ### Phase Scripts
-- `scripts/phase2-convention-pre.sh` - Convention check before write
-- `scripts/phase4-api-stop.sh` - Zero Script QA after API implementation
-- `scripts/phase5-design-post.sh` - Design token verification
-- `scripts/phase6-ui-post.sh` - Layer separation verification
-- `scripts/phase8-review-stop.sh` - Review completion guidance
-- `scripts/phase9-deploy-pre.sh` - Deployment environment validation
+- `scripts/phase2-convention-pre.js` - Convention check before write
+- `scripts/phase4-api-stop.js` - Zero Script QA after API implementation
+- `scripts/phase5-design-post.js` - Design token verification
+- `scripts/phase6-ui-post.js` - Layer separation verification
+- `scripts/phase8-review-stop.js` - Review completion guidance
+- `scripts/phase9-deploy-pre.js` - Deployment environment validation
 
 ### QA Scripts
-- `scripts/qa-pre-bash.sh` - QA setup before Bash
-- `scripts/qa-monitor-post.sh` - QA completion guidance
-- `scripts/qa-stop.sh` - QA session cleanup
+- `scripts/qa-pre-bash.js` - QA setup before Bash
+- `scripts/qa-monitor-post.js` - QA completion guidance
+- `scripts/qa-stop.js` - QA session cleanup
 
 ### Agent Scripts
-- `scripts/design-validator-pre.sh` - Design document validation
-- `scripts/gap-detector-post.sh` - Gap analysis guidance
-- `scripts/analysis-stop.sh` - Analysis completion guidance
+- `scripts/design-validator-pre.js` - Design document validation
+- `scripts/gap-detector-post.js` - Gap analysis guidance
+- `scripts/gap-detector-stop.js` - Gap detector completion
+- `scripts/iterator-stop.js` - Iterator completion
+- `scripts/analysis-stop.js` - Analysis completion guidance
 
 ### Utility Scripts
-- `scripts/pdca-pre-write.sh` - Legacy (merged into pre-write.sh)
-- `scripts/sync-folders.sh` - Folder synchronization
-- `scripts/validate-plugin.sh` - Plugin validation
+- `scripts/pdca-pre-write.js` - PDCA pre-write checks
+- `scripts/archive-feature.js` - Feature archiving
+- `scripts/sync-folders.js` - Folder synchronization
+- `scripts/validate-plugin.js` - Plugin validation
 
 ## Infrastructure
 
 ### Shared Library
-- `lib/common.sh` - Shared utility functions (v1.2.1 Language Tier System)
-  - `get_config()` - Read from bkit.config.json
-  - `is_source_file()` - Negative pattern + extension detection (30+ extensions)
-  - `is_code_file()` - Tier-based code file detection
-  - `is_ui_file()` - UI component files (.tsx, .jsx, .vue, .svelte, .astro)
-  - `get_language_tier()` - Get tier (1-4, experimental, unknown) for file
-  - `get_tier_description()` - Get tier description (AI-Native, Mainstream, etc.)
-  - `get_tier_pdca_guidance()` - Get PDCA guidance based on tier
-  - `is_tier_1()`, `is_tier_2()`, etc. - Tier check helpers
-  - `extract_feature()` - Multi-language feature extraction
-  - `classify_task()` - Task size classification
-  - `detect_level()` - Project level detection
-  - `output_allow()`, `output_block()`, `output_empty()` - JSON output helpers
+- `lib/common.js` - Shared utility functions (v1.3.1 Node.js, 38 functions)
+  - `getConfig()` - Read from bkit.config.json
+  - `isSourceFile()` - Negative pattern + extension detection (30+ extensions)
+  - `isCodeFile()` - Tier-based code file detection
+  - `isUiFile()` - UI component files (.tsx, .jsx, .vue, .svelte, .astro)
+  - `getLanguageTier()` - Get tier (1-4, experimental, unknown) for file
+  - `getTierDescription()` - Get tier description (AI-Native, Mainstream, etc.)
+  - `getTierPdcaGuidance()` - Get PDCA guidance based on tier
+  - `isTier1()`, `isTier2()`, etc. - Tier check helpers
+  - `extractFeature()` - Multi-language feature extraction
+  - `classifyTask()`, `classifyTaskByLines()` - Task size classification
+  - `detectLevel()` - Project level detection
+  - `outputAllow()`, `outputBlock()`, `outputEmpty()` - JSON output helpers
+  - `readStdinSync()`, `parseHookInput()` - Hook input helpers
+  - `PDCA_PHASES` - PDCA phase definitions constant
+  - `getPdcaTaskMetadata()` - Generate task metadata for Claude Task System
+  - `generatePdcaTaskSubject()` - Generate task subject
+  - `generatePdcaTaskDescription()` - Generate task description
+  - `generateTaskGuidance()` - Generate task creation guidance
+  - `getPreviousPdcaPhase()` - Get previous PDCA phase for dependency
+  - `findPdcaStatus()` - Read docs/.pdca-status.json
+  - `getCurrentPdcaPhase()` - Get current PDCA phase for feature
 
 ### Language Tier System (v1.2.1)
 

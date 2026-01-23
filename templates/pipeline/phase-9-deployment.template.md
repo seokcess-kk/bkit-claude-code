@@ -49,7 +49,7 @@
 ### 2.4 Environment Variable Validation
 ```bash
 # Run validation script
-./scripts/validate-env.sh production
+node scripts/check-env.js
 ```
 
 ---

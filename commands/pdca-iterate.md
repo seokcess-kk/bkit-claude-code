@@ -66,6 +66,24 @@ If evaluation fails:
 3. Provide next step recommendations
 ```
 
+### 6. Task System Integration (v1.3.1)
+
+```markdown
+1. Track iteration progress with Tasks:
+   - Create Task: `[Act-1] {feature}` for first iteration
+   - Update Task status on each iteration
+   - Metadata: { pdcaPhase: "act", iteration: N, matchRate: XX }
+
+2. Task Dependency:
+   - blockedBy: [Check Task ID] (gap analysis must be done)
+   - When match rate >= 90%: Mark Task as completed
+
+3. Task Creation for Each Iteration:
+   - `[Act-1] login` → iteration 1
+   - `[Act-2] login` → iteration 2 (blockedBy: Act-1)
+   - Continue until threshold met or max iterations
+```
+
 ## Command Options
 
 | Option | Description | Default |

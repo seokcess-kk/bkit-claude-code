@@ -12,7 +12,7 @@
 
 ## 1. PreToolUse Hooks 테스트
 
-### 1.1 bkit-rules (pre-write.sh - unified hook)
+### 1.1 bkit-rules (pre-write.js - unified hook)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
@@ -58,9 +58,9 @@
 | 1.1.25 | is_code_file "sys.zig" | true (Zig) | [ ] |
 | 1.1.26 | is_ui_file "Hero.astro" | true (Astro UI) | [ ] |
 
-### 1.2 Task Classification (integrated in pre-write.sh)
+### 1.2 Task Classification (integrated in pre-write.js)
 
-> **Note**: Task classification is now integrated into `pre-write.sh` (v1.2.0)
+> **Note**: Task classification is now integrated into `pre-write.js` (v1.2.0)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
@@ -70,7 +70,7 @@
 | 1.2.4 | 1500자 수정 | "Major Feature" (design doc required, may block) | [ ] |
 | 1.2.5 | docs/README.md 수정 | 빈 출력 (src/ 외부) | [ ] |
 
-### 1.3 Convention Hints (integrated in pre-write.sh)
+### 1.3 Convention Hints (integrated in pre-write.js)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
@@ -79,7 +79,7 @@
 | 1.3.3 | .env 파일 Write | 환경변수 컨벤션 안내 | [ ] |
 | 1.3.4 | .md 파일 Write | 빈 출력 | [ ] |
 
-### 1.4 zero-script-qa (qa-pre-bash.sh)
+### 1.4 zero-script-qa (qa-pre-bash.js)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
@@ -88,7 +88,7 @@
 | 1.4.3 | `DROP TABLE users` | Block | [ ] |
 | 1.4.4 | `ls -la` | Allow | [ ] |
 
-### 1.5 phase-9-deployment (phase9-deploy-pre.sh)
+### 1.5 phase-9-deployment (phase9-deploy-pre.js)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
@@ -100,7 +100,7 @@
 
 ## 2. PostToolUse Hooks 테스트
 
-### 2.1 bkit-rules (pdca-post-write.sh)
+### 2.1 bkit-rules (pdca-post-write.js)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
@@ -108,7 +108,7 @@
 | 2.1.2 | src/features/auth/ Write (design doc 없음) | 빈 출력 | [ ] |
 | 2.1.3 | src/lib/utils.ts Write | 빈 출력 | [ ] |
 
-### 2.2 phase-5-design-system (phase5-design-post.sh)
+### 2.2 phase-5-design-system (phase5-design-post.js)
 
 > **Note**: Extension-based detection (v1.2.1) - .tsx, .jsx, .vue, .svelte
 
@@ -120,7 +120,7 @@
 | 2.2.4 | src/App.vue Write (하드코딩 색상 있음) | "⚠️ 디자인 토큰 사용" 경고 | [ ] |
 | 2.2.5 | src/Button.svelte Write | UI 파일 감지 | [ ] |
 
-### 2.3 phase-6-ui-integration (phase6-ui-post.sh)
+### 2.3 phase-6-ui-integration (phase6-ui-post.js)
 
 > **Note**: Extension-based UI detection (v1.2.1) + path-based layer detection
 
@@ -133,7 +133,7 @@
 | 2.3.5 | src/components/Modal.vue Write | "UI Layer Check" 안내 | [ ] |
 | 2.3.6 | src/Card.svelte Write | "UI Layer Check" 안내 | [ ] |
 
-### 2.4 qa-monitor (qa-monitor-post.sh)
+### 2.4 qa-monitor (qa-monitor-post.js)
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
@@ -158,7 +158,7 @@
 
 | # | 테스트 케이스 | 예상 결과 | Pass |
 |---|-------------|----------|------|
-| 4.1 | 새 세션 시작 | session-start.sh 실행, 인사 메시지 | [ ] |
+| 4.1 | 새 세션 시작 | session-start.js 실행, 인사 메시지 | [ ] |
 | 4.2 | once: true 설정 | 한 번만 실행 | [ ] |
 
 ---
@@ -250,7 +250,7 @@
 ```bash
 # 직접 script 실행 (scripts are at root level, not in .claude/)
 echo '{"tool_input":{"file_path":"src/features/auth/login.ts","content":"test"}}' | \
-  scripts/pre-write.sh
+  scripts/pre-write.js
 ```
 
 ### 통합 테스트

@@ -54,7 +54,7 @@
 │  5. Bash 실행 시 PreToolUse Hook                                │
 │                                                                 │
 │  [[../../skills/zero-script-qa/SKILL|zero-script-qa]]                        │
-│  → qa-pre-bash.sh                                               │
+│  → qa-pre-bash.js                                               │
 │                                                                 │
 │  • 파괴적 명령어 체크 (rm -rf, DROP 등)                         │
 │  • 발견 시 → Block                                              │
@@ -87,7 +87,7 @@
 │  8. PostToolUse Hook (보고서 작성 후)                           │
 │                                                                 │
 │  [[../../agents/qa-monitor|qa-monitor]]                            │
-│  → qa-monitor-post.sh                                           │
+│  → qa-monitor-post.js                                           │
 │                                                                 │
 │  • Critical 이슈 있으면:                                        │
 │    "🚨 Critical issues detected!"                               │
@@ -101,7 +101,7 @@
 │  9. Stop Hook (QA 세션 종료 시)                                 │
 │                                                                 │
 │  [[../../skills/zero-script-qa/SKILL|zero-script-qa]]                        │
-│  → qa-stop.sh                                                   │
+│  → qa-stop.js                                                   │
 │                                                                 │
 │  "QA Session completed."                                        │
 │  "1. Review logs for any missed issues"                         │
@@ -175,15 +175,15 @@ Critical Issues:
 
 | 시점 | Hook | Script | 동작 |
 |------|------|--------|------|
-| Bash 실행 전 | PreToolUse | qa-pre-bash.sh | 파괴적 명령어 차단 |
-| 보고서 Write 후 | PostToolUse | qa-monitor-post.sh | Critical 이슈 알림 |
-| QA 세션 종료 | Stop | qa-stop.sh | 다음 단계 안내 |
+| Bash 실행 전 | PreToolUse | qa-pre-bash.js | 파괴적 명령어 차단 |
+| 보고서 Write 후 | PostToolUse | qa-monitor-post.js | Critical 이슈 알림 |
+| QA 세션 종료 | Stop | qa-stop.js | 다음 단계 안내 |
 
 ---
 
 ## 파괴적 명령어 차단 목록
 
-`qa-pre-bash.sh`에서 차단하는 패턴:
+`qa-pre-bash.js`에서 차단하는 패턴:
 
 ```bash
 - rm -rf
@@ -206,9 +206,9 @@ Critical Issues:
 - [ ] docker compose 미실행 시 안내 메시지 확인
 - [ ] 파괴적 명령어 차단 확인 (rm -rf 테스트)
 - [ ] ERROR 로그 감지 시 즉시 보고 확인
-- [ ] 보고서 생성 후 qa-monitor-post.sh 발동 확인
+- [ ] 보고서 생성 후 qa-monitor-post.js 발동 확인
 - [ ] Critical 이슈 있을 때 /pdca-iterate 권장 확인
-- [ ] 세션 종료 시 qa-stop.sh 발동 확인
+- [ ] 세션 종료 시 qa-stop.js 발동 확인
 
 ---
 
@@ -218,4 +218,4 @@ Critical Issues:
 - [[scenario-new-feature]] - 새 기능 요청 시나리오
 - [[../../skills/zero-script-qa/SKILL|zero-script-qa]] - Zero Script QA skill
 - [[../../agents/qa-monitor|qa-monitor]] - QA Monitor agent
-- [[../components/scripts/_scripts-overview]] - qa-pre-bash.sh
+- [[../components/scripts/_scripts-overview]] - qa-pre-bash.js

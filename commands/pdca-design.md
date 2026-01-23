@@ -29,6 +29,12 @@ Receives feature name via $ARGUMENTS. (e.g., /pdca-design login)
    - Create docs/02-design/features/{feature}.design.md
    - Update _INDEX.md
 
+6. **Task System Integration (v1.3.1)**
+   - Create a Task for tracking: `TaskCreate` with subject `[Design] {feature}`
+   - Set metadata: `{ pdcaPhase: "design", feature: "{feature}" }`
+   - Set dependency: `blockedBy: [Plan Task ID]` (link to Plan Task)
+   - Mark Plan Task as completed when starting Design
+
 ## Usage Examples
 
 ```
@@ -51,6 +57,12 @@ Receives feature name via $ARGUMENTS. (e.g., /pdca-design login)
    1. Fill in the architecture, data model, and API specification sections
    2. Request implementation after design completion
    3. After implementation, analyze with /pdca-analyze login
+
+📋 Task System:
+   Task #1: [Plan] login → completed ✓
+   Task #2: [Design] login → in_progress
+   Metadata: { pdcaPhase: "design", feature: "login" }
+   BlockedBy: Task #1
 
 💡 Tip: Focus on "how" to implement in the design document.
         Completing design before coding improves efficiency.

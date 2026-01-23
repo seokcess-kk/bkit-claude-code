@@ -28,7 +28,7 @@
 │  3. PreToolUse Hooks 실행 (Unified Hook v1.2.0)                 │
 │                                                                 │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │ [[../../skills/bkit-rules/SKILL|bkit-rules]] → pre-write.sh      │   │
+│  │ [[../../skills/bkit-rules/SKILL|bkit-rules]] → pre-write.js      │   │
 │  │ (통합 hook: PDCA + Task Classification + Convention)    │   │
 │  │                                                          │   │
 │  │ 1. 소스 파일 감지 (is_source_file - 확장자 기반 v1.2.1)  │   │
@@ -65,7 +65,7 @@
 │  5. PostToolUse Hooks 실행                                      │
 │                                                                 │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │ [[../../skills/bkit-rules/SKILL|bkit-rules]] → pdca-post-write.sh │   │
+│  │ [[../../skills/bkit-rules/SKILL|bkit-rules]] → pdca-post-write.js │   │
 │  │ • design doc 있으면: "/pdca-analyze 권장" 안내           │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │                              │                                  │
@@ -74,7 +74,7 @@
 │  │ 감지: .tsx, .jsx, .vue, .svelte (is_ui_file)             │   │
 │  │                                                          │   │
 │  │ [[../../skills/phase-5-design-system/SKILL|phase-5-design-system]]           │   │
-│  │ → phase5-design-post.sh                                  │   │
+│  │ → phase5-design-post.js                                  │   │
 │  │ • 하드코딩 색상 검사                                     │   │
 │  │ • 디자인 토큰 사용 권장                                  │   │
 │  └─────────────────────────────────────────────────────────┘   │
@@ -82,7 +82,7 @@
 │  ┌─────────────────────────────────────────────────────────┐   │
 │  │ (UI 파일 또는 pages/components/features 경로)            │   │
 │  │ [[../../skills/phase-6-ui-integration/SKILL|phase-6-ui-integration]]          │   │
-│  │ → phase6-ui-post.sh                                      │   │
+│  │ → phase6-ui-post.js                                      │   │
 │  │ • UI 레이어 분리 검증                                    │   │
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
@@ -105,7 +105,7 @@ design doc: docs/02-design/features/auth.design.md 존재
 
 ### PreToolUse 결과
 
-**bkit-rules (pre-write.sh - Unified Hook v1.2.0)**:
+**bkit-rules (pre-write.js - Unified Hook v1.2.0)**:
 ```
 PDCA Notice: This file belongs to the 'auth' feature.
 
@@ -126,12 +126,12 @@ PDCA documentation is essential.
 - Files: kebab-case or PascalCase
 ```
 
-> **Note (v1.2.0)**: 이전 버전의 3개 hook (pdca-pre-write, task-classify, phase2-convention-pre)이
-> pre-write.sh로 통합되었습니다.
+> **Note (v1.2.0)**: 이전 버전의 3개 hook이 pre-write.js로 통합되었습니다.
+> **Note (v1.3.1)**: 모든 스크립트가 Node.js(.js)로 변환되었습니다.
 
 ### PostToolUse 결과
 
-**bkit-rules (pdca-post-write.sh)**:
+**bkit-rules (pdca-post-write.js)**:
 ```
 Write completed: src/features/auth/login.ts
 
@@ -139,7 +139,7 @@ When implementation is finished, run /pdca-analyze auth to verify
 design-implementation alignment.
 ```
 
-**phase-6-ui-integration (phase6-ui-post.sh)**:
+**phase-6-ui-integration (phase6-ui-post.js)**:
 ```
 🔍 UI Layer Check:
 - Components should use hooks, not direct fetch
@@ -184,7 +184,7 @@ design-implementation alignment.
 
 ## 테스트 체크리스트
 
-- [ ] 소스 파일 수정 시 PreToolUse (pre-write.sh) 발동 확인
+- [ ] 소스 파일 수정 시 PreToolUse (pre-write.js) 발동 확인
 - [ ] design doc 있을 때 PDCA 안내 메시지 확인
 - [ ] design doc 없을 때 빈 출력 확인
 - [ ] 50자 미만 수정 시 "Quick Fix" 분류 확인

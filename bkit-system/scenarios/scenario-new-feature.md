@@ -68,8 +68,8 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │  5. Write/Edit 시 Hooks 발동 ([[scenario-write-code]] 참조)     │
 │                                                                 │
-│  PreToolUse: pre-write.sh (unified hook v1.2.0)                │
-│  PostToolUse: pdca-post-write.sh, phase6-ui-post.sh            │
+│  PreToolUse: pre-write.js (unified hook v1.2.0)                │
+│  PostToolUse: pdca-post-write.js, phase6-ui-post.js            │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼

@@ -14,7 +14,7 @@ hooks:
     - matcher: "Bash"
       hooks:
         - type: command
-          command: "${CLAUDE_PLUGIN_ROOT}/scripts/phase9-deploy-pre.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/scripts/phase9-deploy-pre.js"
 agent: infra-architect
 allowed-tools:
   - Read
@@ -352,31 +352,25 @@ export const appConfig = config[env];
 
 ### Required Variable Check Script
 
-```bash
-#!/bin/bash
-# scripts/check-env.sh
+```javascript
+#!/usr/bin/env node
+// scripts/check-env.js
 
-REQUIRED_VARS=(
-  "DATABASE_URL"
-  "AUTH_SECRET"
-  "NEXT_PUBLIC_APP_URL"
-)
+const REQUIRED_VARS = [
+  'DATABASE_URL',
+  'AUTH_SECRET',
+  'NEXT_PUBLIC_APP_URL'
+];
 
-missing=()
+const missing = REQUIRED_VARS.filter(v => !process.env[v]);
 
-for var in "${REQUIRED_VARS[@]}"; do
-  if [ -z "${!var}" ]; then
-    missing+=("$var")
-  fi
-done
+if (missing.length > 0) {
+  console.error('❌ Missing required environment variables:');
+  missing.forEach(v => console.error(`  - ${v}`));
+  process.exit(1);
+}
 
-if [ ${#missing[@]} -ne 0 ]; then
-  echo "❌ Missing required environment variables:"
-  printf '  - %s\n' "${missing[@]}"
-  exit 1
-fi
-
-echo "✅ All required environment variables are set"
+console.log('✅ All required environment variables are set');
 ```
 
 ### Validation in CI/CD
@@ -384,9 +378,7 @@ echo "✅ All required environment variables are set"
 ```yaml
 # GitHub Actions
 - name: Validate Environment
-  run: |
-    chmod +x scripts/check-env.sh
-    ./scripts/check-env.sh
+  run: node scripts/check-env.js
   env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
     AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
