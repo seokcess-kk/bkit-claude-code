@@ -1,6 +1,6 @@
 # Skills Overview
 
-> 18 Skills defined in bkit (v1.2.0)
+> 18 Skills defined in bkit (v1.3.1)
 
 ## What are Skills?
 
@@ -55,8 +55,8 @@ The following skills were consolidated:
 
 | Removed Skill | Merged Into |
 |---------------|-------------|
-| `task-classification` | `lib/common.sh` |
-| `level-detection` | `lib/common.sh` |
+| `task-classification` | `lib/common.js` |
+| `level-detection` | `lib/common.js` |
 | `pdca-methodology` | `bkit-rules` |
 | `document-standards` | `bkit-templates` |
 | `evaluator-optimizer` | `/pdca-iterate` command |
@@ -87,12 +87,12 @@ user-invocable: true|false
 hooks:
   PreToolUse:
     - matcher: "Write|Edit"
-      script: "${CLAUDE_PLUGIN_ROOT}/scripts/script-name.sh"
+      command: "${CLAUDE_PLUGIN_ROOT}/scripts/script-name.js"
   PostToolUse:
     - matcher: "Write"
-      script: "${CLAUDE_PLUGIN_ROOT}/scripts/script-name.sh"
+      command: "${CLAUDE_PLUGIN_ROOT}/scripts/script-name.js"
   Stop:
-    - script: "${CLAUDE_PLUGIN_ROOT}/scripts/script-name.sh"
+    - command: "${CLAUDE_PLUGIN_ROOT}/scripts/script-name.js"
 ---
 ```
 
@@ -105,7 +105,7 @@ hooks:
     - matcher: "Write|Edit"
       hooks:
         - type: command
-          command: "${CLAUDE_PLUGIN_ROOT}/scripts/pre-write.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/scripts/pre-write.js"
 ```
 
 ### PostToolUse
@@ -115,7 +115,7 @@ hooks:
     - matcher: "Write"
       hooks:
         - type: command
-          command: "${CLAUDE_PLUGIN_ROOT}/scripts/pdca-post-write.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/scripts/pdca-post-write.js"
 ```
 
 ### Stop
@@ -124,7 +124,7 @@ hooks:
   Stop:
     - hooks:
         - type: command
-          command: "${CLAUDE_PLUGIN_ROOT}/scripts/qa-stop.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/scripts/qa-stop.js"
 ```
 
 ## Source Location

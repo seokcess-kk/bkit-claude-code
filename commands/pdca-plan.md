@@ -24,7 +24,12 @@ Receives feature name via $ARGUMENTS. (e.g., /pdca-plan login)
    - Create docs/01-plan/features/{feature}.plan.md
    - Update _INDEX.md
 
-4. **Guide Next Steps**
+4. **Task System Integration (v1.3.1)**
+   - Create a Task for tracking: `TaskCreate` with subject `[Plan] {feature}`
+   - Set metadata: `{ pdcaPhase: "plan", feature: "{feature}" }`
+   - This Task will be referenced by Design Task (blockedBy)
+
+5. **Guide Next Steps**
 
 ## Usage Examples
 
@@ -46,6 +51,11 @@ Receives feature name via $ARGUMENTS. (e.g., /pdca-plan login)
    1. Fill in the objectives, scope, and requirements sections of the plan
    2. After completion, proceed to design phase with /pdca-design login
    3. Or simply request "Design the login feature" for automatic progression
+
+📋 Task Created:
+   Task #1: [Plan] login
+   Status: in_progress
+   Metadata: { pdcaPhase: "plan", feature: "login" }
 
 💡 Tip: Focus on "why" this feature is needed in the plan.
 ```

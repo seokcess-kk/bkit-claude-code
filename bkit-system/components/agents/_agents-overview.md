@@ -1,6 +1,6 @@
 # Agents Overview
 
-> bkit에 정의된 11개 Agents 목록과 각각의 역할
+> bkit에 정의된 11개 Agents 목록과 각각의 역할 (v1.3.1)
 
 ## Agents란?
 
@@ -100,10 +100,10 @@ allowed-tools:
 hooks:
   PreToolUse:
     - matcher: "Write"
-      script: "./scripts/script-name.sh"
+      script: "./scripts/script-name.js"
   PostToolUse:
     - matcher: "Write"
-      script: "./scripts/script-name.sh"
+      script: "./scripts/script-name.js"
 ---
 ```
 
@@ -113,10 +113,10 @@ hooks:
 
 | Agent | PreToolUse | PostToolUse |
 |-------|-----------|-------------|
-| [[../../../agents/gap-detector|gap-detector]] | - | `gap-detector-post.sh` |
-| [[../../../agents/design-validator|design-validator]] | `design-validator-pre.sh` | - |
+| [[../../../agents/gap-detector|gap-detector]] | - | `gap-detector-post.js` |
+| [[../../../agents/design-validator|design-validator]] | `design-validator-pre.js` | - |
 | [[../../../agents/code-analyzer|code-analyzer]] | Block (read-only) | - |
-| [[../../../agents/qa-monitor|qa-monitor]] | - | `qa-monitor-post.sh` |
+| [[../../../agents/qa-monitor|qa-monitor]] | - | `qa-monitor-post.js` |
 
 ---
 

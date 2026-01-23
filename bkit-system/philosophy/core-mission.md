@@ -126,7 +126,7 @@ After:  /learn-claude-code → Systematic training
 | Skills | 18 | `skills/*/SKILL.md` |
 | Agents | 11 | `agents/*.md` |
 | Commands | 18 | `commands/*.md` |
-| Scripts | 18 | `scripts/*.sh` |
+| Scripts | 21 | `scripts/*.js` |
 | Templates | 20 | `templates/*.md` |
 
 ### Key Features

@@ -9,7 +9,7 @@ description: |
   Triggers: convention, coding style, naming rules, 컨벤션, コンベンション, 编码风格
 
   Do NOT use for: existing projects with established conventions, deployment, or testing.
-# Note: Hook functionality merged into bkit-rules/pre-write.sh
+# Note: Hook functionality merged into bkit-rules/pre-write.js
 agent: pipeline-guide
 allowed-tools:
   - Read

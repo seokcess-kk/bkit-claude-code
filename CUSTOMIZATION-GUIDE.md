@@ -344,7 +344,7 @@ bkit implements a **4-tier language classification system** optimized for AI-Nat
 bkit automatically detects language tier via file extensions:
 
 ```bash
-# Detected in lib/common.sh get_language_tier()
+# Detected in lib/common.js getLanguageTier()
 Tier 1: .py .pyx .pyi .ts .tsx .js .jsx .mjs .cjs
 Tier 2: .go .rs .dart .astro .vue .svelte .mdx
 Tier 3: .java .kt .kts .swift .c .cpp .cc .h .hpp .sh .bash
@@ -632,7 +632,7 @@ bkit-claude-code/
 │   └── ...
 ├── hooks/
 │   ├── hooks.json                  # Hook configuration
-│   └── session-start.sh            # Session initialization
+│   └── session-start.js            # Session initialization (Node.js)
 └── templates/
     ├── plan.template.md
     └── design.template.md

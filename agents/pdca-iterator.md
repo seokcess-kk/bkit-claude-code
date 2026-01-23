@@ -37,7 +37,7 @@ hooks:
   Stop:
     - hooks:
         - type: command
-          command: "${CLAUDE_PLUGIN_ROOT}/scripts/iterator-stop.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/scripts/iterator-stop.js"
           timeout: 5000
 ---
 
@@ -267,6 +267,50 @@ Automatically invoked when:
 2. User requests "자동 수정", "반복 개선", "iterate until fixed"
 3. After gap-detector finds issues with match rate < 70%
 4. When code-analyzer finds critical issues
+```
+
+## Task System Integration (v1.3.1 - FR-05)
+
+pdca-iterator automatically tracks iterations with Claude Code's Task System:
+
+### Task Creation per Iteration
+
+```markdown
+For each iteration cycle:
+1. Create/Update Task: `[Act-N] {feature}` (N = iteration number)
+2. Set metadata:
+   {
+     pdcaPhase: "act",
+     feature: "{feature}",
+     iteration: N,
+     matchRate: { before: X, after: Y },
+     issuesFixed: N,
+     status: "in_progress" | "completed" | "failed"
+   }
+3. Set dependency: blockedBy = [Check Task ID] or [Previous Act Task ID]
+```
+
+### Iteration Task Chain
+
+```
+[Check] login (matchRate: 72%)
+     ↓ blockedBy
+[Act-1] login → iteration 1 (72% → 85%)
+     ↓ blockedBy
+[Act-2] login → iteration 2 (85% → 93%) ✓ Pass!
+```
+
+### Task Status Updates
+
+```markdown
+Each iteration updates:
+- Current Task status: pending → in_progress → completed/failed
+- Metadata with progress: { matchRateBefore, matchRateAfter, issuesFixed }
+- Comments: Summary of changes made
+
+On completion:
+- Mark final [Act-N] Task as completed ✓
+- Suggest: "/pdca-report {feature}" for completion report
 ```
 
 ## Integration with PDCA Cycle

@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-01-23
+
+### Changed
+- **Cross-Platform Hooks**: All 22 hook scripts converted from Bash (.sh) to Node.js (.js)
+  - Windows Native environment now fully supported
+  - No external dependencies required (jq, bash, wc, grep removed)
+  - Shebang: `#!/usr/bin/env node` for universal compatibility
+- **lib/common.js**: New centralized library replacing lib/common.sh
+  - 30 functions across 9 categories
+  - Pure Node.js implementation
+  - Synchronous stdin reading for hooks
+- **hooks/hooks.json**: Updated all script references from .sh to .js
+- **bkit-system documentation**: Updated all references from .sh to .js
+
+### Added
+- **hooks/session-start.js**: SessionStart hook converted to Node.js
+- **Input Helpers**: New functions for hook input handling
+  - `readStdinSync()`: Synchronous JSON input from stdin
+  - `readStdin()`: Async version for complex scenarios
+  - `parseHookInput()`: Extract common fields from hook input
+
+### Removed
+- **Bash Scripts**: All 21 .sh files in scripts/ directory
+- **hooks/session-start.sh**: Replaced by session-start.js
+- **lib/common.sh**: Replaced by lib/common.js
+
+### Fixed
+- **Windows Compatibility**: Hooks now work on Windows without WSL or Git Bash
+- **Skills/Agents References**: Updated all .sh references to .js (12 files)
+- **Global Hooks**: hooks/hooks.json now references .js files correctly
+
+### Compatibility
+- **Minimum Claude Code Version**: 2.1.15
+- **Recommended Claude Code Version**: 2.1.17
+- **Supported Platforms**: Windows (Native), macOS, Linux
+
+---
+
 ## [1.3.0] - 2026-01-22
 
 ### Added

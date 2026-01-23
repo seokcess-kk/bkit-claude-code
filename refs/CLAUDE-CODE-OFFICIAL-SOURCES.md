@@ -140,7 +140,7 @@ plugin-name/
 ├── commands/                # Slash commands (.md)
 ├── agents/                  # Agent definitions (.md)
 ├── skills/                  # Skill definitions (folder/SKILL.md)
-├── hooks/                   # Hook definitions (hooks.json or .sh)
+├── hooks/                   # Hook definitions (hooks.json or .js)
 ├── .mcp.json               # MCP server config (optional)
 └── README.md               # Plugin documentation
 ```
@@ -206,7 +206,7 @@ hooks: hooks.json
    - [ ] Check breaking changes
 
 3. **On Version Update**
-   - [ ] Run `scripts/validate-plugin.sh`
+   - [ ] Run `scripts/validate-plugin.js`
    - [ ] Check YAML frontmatter compatibility
    - [ ] Check hook events compatibility
    - [ ] Review new features for adoption
@@ -250,7 +250,7 @@ hooks: hooks.json
   - Tier 3 (Domain Specific): Java, Kotlin, Swift, C/C++
   - Tier 4 (Legacy/Niche): PHP, Ruby, C#, Scala, Elixir
   - Experimental: Mojo, Zig, V
-- **New Tier Functions** in `lib/common.sh`: `get_language_tier()`, `get_tier_description()`, `get_tier_pdca_guidance()`, tier check helpers
+- **New Tier Functions** in `lib/common.js`: `getLanguageTier()`, `getTierDescription()`, `getTierPdcaGuidance()`, tier check helpers
 - **New Extension Support**: `.dart`, `.astro`, `.mdx`, `.mojo`, `.zig`, `.v`
 - **Tier Guidance** added to starter, dynamic, enterprise, mobile-app, desktop-app skills
 - **Environment Variables Fix**: `CLAUDE_PROJECT_DIR` vs `CLAUDE_PLUGIN_ROOT` usage corrected
@@ -260,17 +260,17 @@ hooks: hooks.json
 
 - Skills consolidated: 26 → 18 (8 merged into others)
 - New centralized config: `bkit.config.json`
-- New shared library: `lib/common.sh`
+- New shared library: `lib/common.js`
 - `.claude/` removed from version control (override pattern for customization)
 
 ### Validation Script
 
 ```bash
 # Plugin validation check
-./scripts/validate-plugin.sh
+./scripts/validate-plugin.js
 
 # Compatibility check with specific version
-./scripts/validate-plugin.sh --claude-version 2.1.2
+./scripts/validate-plugin.js --claude-version 2.1.17
 ```
 
 ---

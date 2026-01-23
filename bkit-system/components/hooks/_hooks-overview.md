@@ -1,6 +1,8 @@
 # Hooks Overview
 
-> Hook events triggered during Claude Code operations (v1.2.3)
+> Hook events triggered during Claude Code operations (v1.3.1)
+>
+> **v1.3.1**: All hooks converted from Bash (.sh) to Node.js (.js) for cross-platform compatibility
 
 ## What are Hooks?
 
@@ -20,7 +22,7 @@ Hooks are **scripts that automatically execute on specific Claude Code events**.
 │  hooks/hooks.json (Global)     skills/*/SKILL.md (Local)    │
 │  ┌─────────────────────┐       ┌─────────────────────┐      │
 │  │ SessionStart        │       │ PreToolUse          │      │
-│  │ └─ session-start.sh │       │ PostToolUse         │      │
+│  │ └─ session-start.js │       │ PostToolUse         │      │
 │  └─────────────────────┘       │ Stop                │      │
 │                                └─────────────────────┘      │
 └─────────────────────────────────────────────────────────────┘
@@ -33,17 +35,29 @@ Global hooks are defined in `hooks/hooks.json`:
 ```json
 {
   "$schema": "https://json.schemastore.org/claude-code-hooks.json",
-  "description": "bkit Vibecoding Kit - Session initialization",
+  "description": "bkit Vibecoding Kit - Global hooks for PDCA workflow enforcement",
   "hooks": {
     "SessionStart": [
       {
         "once": true,
         "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh",
-            "timeout": 5000
-          }
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.js", "timeout": 5000 }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/scripts/pre-write.js", "timeout": 5000 }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/scripts/pdca-post-write.js", "timeout": 5000 }
         ]
       }
     ]
@@ -51,7 +65,7 @@ Global hooks are defined in `hooks/hooks.json`:
 }
 ```
 
-> **Note**: Only `SessionStart` is defined globally. PreToolUse/PostToolUse hooks are defined in skill frontmatter for contextual activation.
+> **Note**: `SessionStart`, `PreToolUse`, and `PostToolUse` are all defined in `hooks/hooks.json` for global PDCA enforcement. Skill frontmatter can define additional hooks for contextual features.
 
 ## Hook Events
 
@@ -61,7 +75,7 @@ Global hooks are defined in `hooks/hooks.json`:
 
 | Script | Purpose |
 |--------|---------|
-| `hooks/session-start.sh` | Initialize session, detect project level, guide user with AskUserQuestion |
+| `hooks/session-start.js` | Initialize session, detect project level, guide user with AskUserQuestion |
 
 **Features**:
 - Project level detection (Starter/Dynamic/Enterprise)
@@ -76,7 +90,7 @@ Global hooks are defined in `hooks/hooks.json`:
 **Output**:
 ```json
 {
-  "systemMessage": "👋 bkit Vibecoding Kit activated",
+  "systemMessage": "bkit Vibecoding Kit activated",
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
     "additionalContext": "# bkit Vibecoding Kit - Required Startup Procedure..."
@@ -84,14 +98,14 @@ Global hooks are defined in `hooks/hooks.json`:
 }
 ```
 
-### 2. PreToolUse (Skill Frontmatter)
+### 2. PreToolUse (Global + Skill Frontmatter)
 
 **Trigger**: Before Write/Edit tool operations
-**Defined in**: Skill YAML frontmatter (not hooks.json)
+**Defined in**: `hooks/hooks.json` (global) + Skill YAML frontmatter (contextual)
 
 | Matcher | Script | Purpose |
 |---------|--------|---------|
-| `Write\|Edit` | `scripts/pre-write.sh` | PDCA check, task classification, convention hints |
+| `Write\|Edit` | `scripts/pre-write.js` | PDCA check, task classification, convention hints |
 
 **Input (stdin JSON)**:
 ```json
@@ -115,14 +129,14 @@ Global hooks are defined in `hooks/hooks.json`:
 }
 ```
 
-### 3. PostToolUse (Skill Frontmatter)
+### 3. PostToolUse (Global + Skill Frontmatter)
 
 **Trigger**: After Write tool operations complete
-**Defined in**: Skill YAML frontmatter (not hooks.json)
+**Defined in**: `hooks/hooks.json` (global) + Skill YAML frontmatter (contextual)
 
 | Matcher | Script | Purpose |
 |---------|--------|---------|
-| `Write` | `scripts/pdca-post-write.sh` | Guide next steps after file write |
+| `Write` | `scripts/pdca-post-write.js` | Guide next steps after file write |
 
 **Usage**:
 - Post-operation guidance
@@ -141,7 +155,7 @@ SessionStart (once)
     │
     ▼
 PreToolUse (Write|Edit)
-    ├─ pre-write.sh
+    ├─ pre-write.js
     │   ├─ Task classification (Quick Fix → Major Feature)
     │   ├─ PDCA phase detection
     │   └─ Convention hints
@@ -154,7 +168,7 @@ PreToolUse (Write|Edit)
     │
     ▼
 PostToolUse (Write)
-    └─ pdca-post-write.sh
+    └─ pdca-post-write.js
         ├─ Extract feature name
         └─ Suggest gap analysis
 ```
@@ -163,9 +177,9 @@ PostToolUse (Write)
 
 | Hook | Script | Dependencies |
 |------|--------|--------------|
-| SessionStart | `session-start.sh` | `lib/common.sh`, `bkit.config.json` |
-| PreToolUse | `pre-write.sh` | `lib/common.sh`, `bkit.config.json` |
-| PostToolUse | `pdca-post-write.sh` | `lib/common.sh` |
+| SessionStart | `session-start.js` | `lib/common.js`, `bkit.config.json` |
+| PreToolUse | `pre-write.js` | `lib/common.js`, `bkit.config.json` |
+| PostToolUse | `pdca-post-write.js` | `lib/common.js` |
 
 ## Additional Scripts (Not in hooks.json)
 
@@ -175,50 +189,49 @@ These scripts are available for skill frontmatter hooks or manual use:
 
 | Script | Event | Purpose |
 |--------|-------|---------|
-| `phase2-convention-pre.sh` | PreToolUse | Convention check |
-| `phase4-api-stop.sh` | Stop | Zero Script QA guidance |
-| `phase5-design-post.sh` | PostToolUse | Design token verification |
-| `phase6-ui-post.sh` | PostToolUse | Layer separation check |
-| `phase8-review-stop.sh` | Stop | Review summary |
-| `phase9-deploy-pre.sh` | PreToolUse | Environment validation |
+| `phase2-convention-pre.js` | PreToolUse | Convention check |
+| `phase4-api-stop.js` | Stop | Zero Script QA guidance |
+| `phase5-design-post.js` | PostToolUse | Design token verification |
+| `phase6-ui-post.js` | PostToolUse | Layer separation check |
+| `phase8-review-stop.js` | Stop | Review summary |
+| `phase9-deploy-pre.js` | PreToolUse | Environment validation |
 
 ### QA Scripts
 
 | Script | Event | Purpose |
 |--------|-------|---------|
-| `qa-pre-bash.sh` | PreToolUse | QA setup before Bash |
-| `qa-monitor-post.sh` | PostToolUse | QA completion guidance |
-| `qa-stop.sh` | Stop | QA session cleanup |
+| `qa-pre-bash.js` | PreToolUse | QA setup before Bash |
+| `qa-monitor-post.js` | PostToolUse | QA completion guidance |
+| `qa-stop.js` | Stop | QA session cleanup |
 
 ### Agent Scripts
 
 | Script | Event | Purpose |
 |--------|-------|---------|
-| `design-validator-pre.sh` | PreToolUse | Design document validation |
-| `gap-detector-post.sh` | PostToolUse | Gap analysis guidance |
-| `analysis-stop.sh` | Stop | Analysis completion |
+| `design-validator-pre.js` | PreToolUse | Design document validation |
+| `gap-detector-post.js` | PostToolUse | Gap analysis guidance |
+| `gap-detector-stop.js` | Stop | Gap detector completion |
+| `iterator-stop.js` | Stop | Iterator completion |
+| `analysis-stop.js` | Stop | Analysis completion |
 
 ## Hook Script Writing Rules
 
-### Standard Structure
+### Standard Structure (Node.js)
 
-```bash
-#!/bin/bash
-set -e
+```javascript
+#!/usr/bin/env node
+const { readStdinSync, parseHookInput, outputAllow, outputBlock } = require('../lib/common.js');
 
-# Source common utilities
-source "${CLAUDE_PLUGIN_ROOT}/lib/common.sh"
+// Read JSON input from stdin
+const input = readStdinSync();
+const { filePath, content } = parseHookInput(input);
 
-# Read JSON input from stdin
-INPUT=$(cat)
-FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // ""')
-
-# Condition check
-if [[ condition ]]; then
-    output_block "Block reason"
-else
-    output_allow "Guidance message"
-fi
+// Condition check
+if (condition) {
+    outputBlock("Block reason");
+} else {
+    outputAllow("Guidance message");
+}
 ```
 
 ### Output Rules
@@ -228,12 +241,12 @@ fi
 3. `reason` required when `block`
 4. `additionalContext` is passed to Claude
 
-### Helper Functions (lib/common.sh)
+### Helper Functions (lib/common.js)
 
-```bash
-output_allow "message"   # Allow with context
-output_block "reason"    # Block with reason
-output_empty            # Allow without context
+```javascript
+outputAllow("message")   // Allow with context
+outputBlock("reason")    // Block with reason (exits with code 2)
+outputEmpty()            // Allow without context
 ```
 
 ## Related Documents

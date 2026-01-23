@@ -123,14 +123,14 @@ Write/Edit 시 (PreToolUse hook):
 ```
 gap-detector Agent (Check)
     ↓ (Stop hook)
-gap-detector-stop.sh
+gap-detector-stop.js
     ├── >= 90% Match Rate → report-generator 제안 → /archive 가능
     ├── 70-89% Match Rate → 선택지 제공 (수동/자동)
     └── < 70% Match Rate  → pdca-iterator 강력 권장
                                ↓
                           pdca-iterator Agent (Act)
                                ↓ (Stop hook)
-                          iterator-stop.sh
+                          iterator-stop.js
                                ├── 완료 → report-generator 제안
                                └── 진행 중 → gap-detector 재실행 안내
                                     ↓

@@ -1,6 +1,6 @@
 # Trigger Matrix
 
-> Core matrix showing which components trigger on each event (v1.3.0)
+> Core matrix showing which components trigger on each event (v1.3.1)
 
 ## Hook Event Matrix
 
@@ -10,9 +10,9 @@ These hooks are defined in `hooks/hooks.json` and apply to **all sessions regard
 
 | Event | Matcher | Script | Action |
 |-------|---------|--------|--------|
-| SessionStart | - | `session-start.sh` | Initialize session, detect level, guide user via AskUserQuestion |
-| PreToolUse | `Write\|Edit` | `pre-write.sh` | PDCA doc check, task classification, convention hints, block major features without design |
-| PostToolUse | `Write` | `pdca-post-write.sh` | Suggest gap analysis after implementation |
+| SessionStart | - | `session-start.js` | Initialize session, detect level, guide user via AskUserQuestion |
+| PreToolUse | `Write\|Edit` | `pre-write.js` | PDCA doc check, task classification, convention hints, block major features without design |
+| PostToolUse | `Write` | `pdca-post-write.js` | Suggest gap analysis after implementation |
 
 > **Note**: Global hooks ensure PDCA guidance is available. Skill-specific hooks provide additional contextual features when skills are activated.
 
@@ -24,30 +24,30 @@ These hooks are defined in skill YAML frontmatter:
 
 | Tool | Skill/Agent | Script | Action |
 |------|-------------|--------|--------|
-| `Write` | [[../agents/design-validator|design-validator]] | `design-validator-pre.sh` | Design document checklist |
+| `Write` | [[../agents/design-validator|design-validator]] | `design-validator-pre.js` | Design document checklist |
 | `Write\|Edit` | [[../agents/code-analyzer|code-analyzer]] | (block) | Code analyzer is read-only |
-| `Bash` | [[../../skills/zero-script-qa/SKILL|zero-script-qa]] | `qa-pre-bash.sh` | Block destructive commands |
-| `Bash` | [[../../skills/phase-9-deployment/SKILL|phase-9-deployment]] | `phase9-deploy-pre.sh` | Environment validation |
+| `Bash` | [[../../skills/zero-script-qa/SKILL|zero-script-qa]] | `qa-pre-bash.js` | Block destructive commands |
+| `Bash` | [[../../skills/phase-9-deployment/SKILL|phase-9-deployment]] | `phase9-deploy-pre.js` | Environment validation |
 
 #### PostToolUse
 
 | Tool | Skill/Agent | Script | Action |
 |------|-------------|--------|--------|
-| `Write` | [[../../skills/phase-5-design-system/SKILL|phase-5-design-system]] | `phase5-design-post.sh` | Design token verification |
-| `Write` | [[../../skills/phase-6-ui-integration/SKILL|phase-6-ui-integration]] | `phase6-ui-post.sh` | UI layer separation check |
-| `Write` | [[../agents/gap-detector|gap-detector]] | `gap-detector-post.sh` | Post-analysis iteration guidance |
-| `Write` | [[../agents/qa-monitor|qa-monitor]] | `qa-monitor-post.sh` | Critical issue notification |
+| `Write` | [[../../skills/phase-5-design-system/SKILL|phase-5-design-system]] | `phase5-design-post.js` | Design token verification |
+| `Write` | [[../../skills/phase-6-ui-integration/SKILL|phase-6-ui-integration]] | `phase6-ui-post.js` | UI layer separation check |
+| `Write` | [[../agents/gap-detector|gap-detector]] | `gap-detector-post.js` | Post-analysis iteration guidance |
+| `Write` | [[../agents/qa-monitor|qa-monitor]] | `qa-monitor-post.js` | Critical issue notification |
 
 #### Stop
 
 | Skill/Agent | Script | Action |
 |-------------|--------|--------|
-| [[../../skills/phase-4-api/SKILL|phase-4-api]] | `phase4-api-stop.sh` | Zero Script QA guidance |
-| [[../../skills/phase-8-review/SKILL|phase-8-review]] | `phase8-review-stop.sh` | Review summary + gap analysis |
-| [[../../skills/zero-script-qa/SKILL|zero-script-qa]] | `qa-stop.sh` | QA session cleanup |
+| [[../../skills/phase-4-api/SKILL|phase-4-api]] | `phase4-api-stop.js` | Zero Script QA guidance |
+| [[../../skills/phase-8-review/SKILL|phase-8-review]] | `phase8-review-stop.js` | Review summary + gap analysis |
+| [[../../skills/zero-script-qa/SKILL|zero-script-qa]] | `qa-stop.js` | QA session cleanup |
 | [[../../skills/development-pipeline/SKILL|development-pipeline]] | `echo` | Pipeline completion |
-| [[../agents/gap-detector|gap-detector]] | `gap-detector-stop.sh` | Check-Act iteration: Match Rate 기반 분기 (v1.3.0) |
-| [[../agents/pdca-iterator|pdca-iterator]] | `iterator-stop.sh` | Check-Act iteration: 완료/계속 안내 (v1.3.0) |
+| [[../agents/gap-detector|gap-detector]] | `gap-detector-stop.js` | Check-Act iteration: Match Rate 기반 분기 (v1.3.0) |
+| [[../agents/pdca-iterator|pdca-iterator]] | `iterator-stop.js` | Check-Act iteration: 완료/계속 안내 (v1.3.0) |
 
 ---
 
@@ -57,7 +57,7 @@ When user writes/edits source code files:
 
 ```
 1. PreToolUse Stage (Skill Frontmatter)
-   └── pre-write.sh ← Unified hook
+   └── pre-write.js ← Unified hook
        ├── 1. Task classification (Quick Fix → Major Feature)
        ├── 2. PDCA document check (design doc exists?)
        └── 3. Convention hints (by file type)
@@ -65,11 +65,11 @@ When user writes/edits source code files:
 2. Actual Write/Edit Execution
 
 3. PostToolUse Stage (Skill Frontmatter)
-   ├── pdca-post-write.sh
+   ├── pdca-post-write.js
    │   └── Suggest gap analysis (if design doc exists)
-   ├── phase-5-design-system (phase5-design-post.sh)
+   ├── phase-5-design-system (phase5-design-post.js)
    │   └── Verify design tokens (if UI file: .tsx, .jsx, .vue, .svelte)
-   └── phase-6-ui-integration (phase6-ui-post.sh)
+   └── phase-6-ui-integration (phase6-ui-post.js)
        └── Verify layer separation (if UI file or pages/components/features path)
 ```
 
@@ -90,14 +90,14 @@ Automatic iteration cycle for quality improvement:
 ```
 gap-detector Agent (Check)
     ↓ (Stop hook)
-gap-detector-stop.sh
+gap-detector-stop.js
     ├── >= 90% Match Rate → report-generator 제안
     ├── 70-89% Match Rate → 선택지 제공 (수동/자동)
     └── < 70% Match Rate  → pdca-iterator 강력 권장
                                ↓
                           pdca-iterator Agent (Act)
                                ↓ (Stop hook)
-                          iterator-stop.sh
+                          iterator-stop.js
                                ├── 완료 감지 → report-generator 제안
                                └── 진행 중 → gap-detector 재실행 안내
 ```

@@ -28,7 +28,7 @@ hooks:
   Stop:
     - hooks:
         - type: command
-          command: "${CLAUDE_PLUGIN_ROOT}/scripts/gap-detector-stop.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/scripts/gap-detector-stop.js"
           timeout: 5000
 ---
 
@@ -228,6 +228,45 @@ Convention Score Calculation:
 ### Documentation Update Needed
 1. Reflect added features in design document
 2. Document changed specs
+```
+
+## Task System Integration (v1.3.1 - FR-04)
+
+gap-detector automatically integrates with Claude Code's Task System:
+
+### Task Creation
+
+```markdown
+When gap analysis completes:
+1. Create Task: `[Check] {feature}` with analysis results
+2. Set metadata:
+   {
+     pdcaPhase: "check",
+     feature: "{feature}",
+     matchRate: {percent},
+     gaps: { missing: N, added: N, changed: N }
+   }
+3. Set dependency: blockedBy = [Do Task ID]
+```
+
+### Conditional Task Creation
+
+```markdown
+If matchRate < 90%:
+  → Auto-create: `[Act] {feature}` Task
+  → Suggest: "/pdca-iterate {feature}"
+  → Task metadata: { pdcaPhase: "act", requiredMatchRate: 90 }
+
+If matchRate >= 90%:
+  → Mark [Check] Task as completed ✓
+  → Suggest: "/pdca-report {feature}" for completion
+```
+
+### Task Dependency Chain
+
+```
+[Plan] feature → [Design] feature → [Do] feature → [Check] feature → [Act] feature
+     #1              #2               #3              #4              #5
 ```
 
 ## Auto-Invoke Conditions
