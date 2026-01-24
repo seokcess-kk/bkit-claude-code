@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-01-24T04:39:12.443Z",
+  "lastUpdated": "2026-01-24T05:22:42.845Z",
   "activeFeatures": [
     "scripts",
     "bkit-claude-code",
@@ -14,7 +14,7 @@
     "compatibility",
     "test"
   ],
-  "primaryFeature": "test",
+  "primaryFeature": "bkit-claude-code",
   "features": {
     "scripts": {
       "phase": "do",
@@ -32,16 +32,19 @@
       }
     },
     "bkit-claude-code": {
-      "phase": "do",
-      "phaseNumber": 3,
+      "phase": "completed",
+      "phaseNumber": 6,
       "startedAt": "2026-01-23T16:49:29.935Z",
-      "updatedAt": "2026-01-23T19:17:54.030Z",
-      "lastFile": "/Users/popup-kay/Documents/GitHub/popup/bkit-claude-code/lib/common.js",
+      "updatedAt": "2026-01-24T06:30:00.000Z",
+      "completedAt": "2026-01-24T06:30:00.000Z",
+      "matchRate": 100,
+      "archivedTo": "docs/archive/claude-code-v2-1-19",
       "requirements": [],
       "documents": {},
       "timestamps": {
         "started": "2026-01-23T16:49:29.935Z",
-        "lastUpdated": "2026-01-23T20:16:55.407Z"
+        "lastUpdated": "2026-01-24T06:30:00.000Z",
+        "completed": "2026-01-24T06:30:00.000Z"
       }
     },
     "test-scripts": {
@@ -219,39 +222,9 @@
   "session": {
     "startedAt": "2026-01-23T19:17:54.030Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-01-24T04:39:12.443Z"
+    "lastActivity": "2026-01-24T05:22:42.845Z"
   },
   "history": [
-    {
-      "timestamp": "2026-01-23T19:16:55.221Z",
-      "feature": "bkit-claude-code",
-      "phase": "do",
-      "action": "updated"
-    },
-    {
-      "timestamp": "2026-01-23T19:17:19.194Z",
-      "feature": "bkit-claude-code",
-      "phase": "do",
-      "action": "updated"
-    },
-    {
-      "timestamp": "2026-01-23T19:17:30.588Z",
-      "feature": "bkit-claude-code",
-      "phase": "do",
-      "action": "updated"
-    },
-    {
-      "timestamp": "2026-01-23T19:17:54.030Z",
-      "feature": "bkit-claude-code",
-      "phase": "do",
-      "action": "updated"
-    },
-    {
-      "timestamp": "2026-01-23T19:19:19.073Z",
-      "feature": "bkit-claude-code",
-      "phase": "do",
-      "action": "updated"
-    },
     {
       "timestamp": "2026-01-23T19:19:40.931Z",
       "feature": "bkit-claude-code",
@@ -822,6 +795,36 @@
     {
       "timestamp": "2026-01-24T04:39:12.443Z",
       "feature": "test",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-01-24T05:08:32.298Z",
+      "feature": "bkit-claude-code",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-01-24T05:22:42.481Z",
+      "feature": "bkit-claude-code",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-01-24T05:22:42.599Z",
+      "feature": "bkit-claude-code",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-01-24T05:22:42.708Z",
+      "feature": "bkit-claude-code",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-01-24T05:22:42.844Z",
+      "feature": "bkit-claude-code",
       "phase": "do",
       "action": "updated"
     }
