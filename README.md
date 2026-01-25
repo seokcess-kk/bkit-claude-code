@@ -15,6 +15,45 @@ bkit is a plugin/extension that transforms how you build software with AI. It pr
 
 ---
 
+## What is Context Engineering?
+
+**Context Engineering** is the systematic curation of context tokens for optimal LLM inference—going beyond simple prompt crafting to build entire systems that consistently guide AI behavior.
+
+```
+Traditional Prompt Engineering:
+  "The art of writing good prompts"
+
+Context Engineering:
+  "The art of designing systems that integrate prompts, tools, and state
+   to provide LLMs with optimal context for inference"
+```
+
+### bkit's Context Engineering Architecture
+
+bkit implements Context Engineering through three interconnected layers:
+
+| Layer | Components | Purpose |
+|-------|------------|---------|
+| **Domain Knowledge** | 18 Skills | Structured expert knowledge (phases, levels, specialized domains) |
+| **Behavioral Rules** | 11 Agents | Role-based constraints with model selection (opus/sonnet/haiku) |
+| **State Management** | 76+ Functions | PDCA status, intent detection, ambiguity scoring, multi-feature context |
+
+### 5-Layer Hook System
+
+Context injection occurs at five distinct layers:
+
+```
+Layer 1: hooks.json (Global)     → Session initialization, PDCA onboarding
+Layer 2: Skill Frontmatter       → Domain-specific hooks (PreToolUse, PostToolUse, Stop)
+Layer 3: Agent Frontmatter       → Task-specific hooks with constraints
+Layer 4: Description Triggers    → Semantic matching in 8 languages
+Layer 5: Scripts (26 modules)    → Actual Node.js execution logic
+```
+
+> **Learn more**: See [Context Engineering Principles](bkit-system/philosophy/context-engineering.md) for detailed implementation.
+
+---
+
 ## Features
 
 ![bkit Features](images/bkit-features.png)
