@@ -1,20 +1,21 @@
 ---
 name: menu
 description: |
-  bkit plugin menu - Show all available bkit skills.
+  bkit plugin menu - Show all available bkit functions.
   Workaround for skills autocomplete issue.
 
-  Use "/bkit:menu" to see available skills list.
+  Use "/bkit:menu" to see available functions list.
 
   Triggers: menu, bkit menu
 user-invocable: true
 allowed-tools:
   - Read
+  - Skill
 ---
 
 # bkit Menu
 
-> Show all available bkit skills (Skills autocomplete workaround)
+> Show all available bkit functions (Skills autocomplete workaround)
 
 Display the following help message:
 
@@ -56,19 +57,19 @@ Display the following help message:
   /claude-code-learning setup    Analyze current project setup
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚠️  Note: Skills don't have autocomplete in CLI.
+⚠️  Note: These functions don't have autocomplete in CLI.
     Type the command directly (e.g., /pdca plan login)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ---
 
-## Skills Reference
+## Functions Reference
 
-### User-Invocable Skills (11)
+### User-Invocable Functions (11)
 
-| Skill | Description |
-|-------|-------------|
+| Function | Description |
+|----------|-------------|
 | `/pdca` | PDCA cycle management |
 | `/starter` | Starter project (HTML/CSS/Next.js) |
 | `/dynamic` | Dynamic project (bkend.ai BaaS) |
@@ -81,10 +82,10 @@ Display the following help message:
 | `/bkit-rules` | Core rules (auto-applied) |
 | `/bkit-templates` | PDCA document templates |
 
-### Claude-Only Skills (11)
+### Claude-Only Functions (11)
 
-| Skill | Description |
-|-------|-------------|
+| Function | Description |
+|----------|-------------|
 | `/phase-1-schema` ~ `/phase-9-deployment` | 9-phase Pipeline knowledge |
 | `/mobile-app` | Mobile app development |
 | `/desktop-app` | Desktop app development |
