@@ -36,7 +36,8 @@ bkit-system/.obsidian/plugins/
 .claude/
 
 # Docs folder (too large for plugin distribution)
-docs/
+docs/.pdca-snapshots/
+docs/archive/
 
 # Internal skills/commands (company-only, not for public repo)
 skills/github-integration/
