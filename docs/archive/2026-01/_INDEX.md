@@ -23,6 +23,9 @@
 | [task-bkit-integration](./task-bkit-integration/) | 2026-01-29 | 100% | 4 | ✅ Complete |
 | [bkit-core-modularization](./bkit-core-modularization/) | 2026-01-29 | 100% | 2 | ✅ Complete |
 | [claude-code-2.1.25-compatibility-test](./claude-code-2.1.25-compatibility-test/) | 2026-01-30 | 100% | 2 | ✅ Complete |
+| [v1.4.4-skills-agents-commands-enhancement](./v1.4.4-skills-agents-commands-enhancement/) | 2026-01-27 | 100% | 3 | ✅ Complete |
+| [bkit-full-feature-test-v1.4.7](./bkit-full-feature-test-v1.4.7/) | 2026-01-31 | 94.5% | 2 | ✅ Complete |
+| [claude-code-v2.1.27-compatibility-test](./claude-code-v2.1.27-compatibility-test/) | 2026-01-31 | 100% | 2 | ✅ Complete |
 
 ---
 
@@ -369,4 +372,58 @@
 
 ---
 
-*Last updated: 2026-01-30*
+### v1.4.4-skills-agents-commands-enhancement
+
+- **완료일**: 2026-01-27
+- **PDCA Cycle**: #17
+- **최종 매치율**: 100%
+
+**포함 문서:**
+- `v1.4.4-skills-agents-commands-enhancement.plan.md` - Plan 문서
+- `v1.4.4-skills-agents-commands-enhancement.design.md` - Design 문서
+- `v1.4.4-skills-agents-commands-enhancement.report.md` - Report 문서
+
+**주요 성과:**
+- Skills, Agents, Commands 구조 개선
+- 21개 Skills 체계화
+- 11개 Agents 명세 정리
+- Legacy 명령어 마이그레이션
+
+---
+
+### bkit-full-feature-test-v1.4.7
+
+- **완료일**: 2026-01-31
+- **PDCA Cycle**: #18
+- **최종 매치율**: 94.5% (127개 테스트 케이스)
+
+**포함 문서:**
+- `bkit-full-feature-test-v1.4.7.plan.md` - Plan 문서
+- `bkit-full-feature-test-v1.4.7.report.md` - Report 문서
+
+**주요 성과:**
+- bkit v1.4.7 전체 기능 테스트 완료
+- 127개 테스트 케이스: 120 PASS (94.5%)
+- 21 Skills + 11 Agents + 5 Hooks 검증
+- PDCA 사이클 자동화 기능 확인
+
+---
+
+### claude-code-v2.1.27-compatibility-test
+
+- **완료일**: 2026-01-31
+- **PDCA Cycle**: #19
+- **최종 매치율**: 100%
+
+**포함 문서:**
+- `claude-code-v2.1.27-compatibility-test.plan.md` - Plan 문서
+- `claude-code-v2.1.27-compatibility-test.report.md` - Report 문서
+
+**주요 성과:**
+- Claude Code 2.1.25→2.1.27 업그레이드 호환성 검증
+- bkit v1.4.7 완전 호환 확인
+- 21 Skills + 11 Agents + 6 Hooks 정상 동작 검증
+
+---
+
+*Last updated: 2026-01-31*
