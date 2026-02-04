@@ -21,7 +21,7 @@ Display the following help message:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🧰 bkit - AI Native Development Toolkit v1.4.5
+🧰 bkit - AI Native Development Toolkit (Claude Code Edition)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📋 PDCA (Document-Driven Development)
